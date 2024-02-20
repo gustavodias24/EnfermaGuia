@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import benicio.solucoes.enfermaguia.databinding.ActivityMainBinding;
+import benicio.solucoes.enfermaguia.model.UsuarioModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
         mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         editor = prefs.edit();
@@ -50,39 +52,44 @@ public class MainActivity extends AppCompatActivity {
             senha = mainBinding.senhaField.getEditText().getText().toString().trim();
 
             if (!login.isEmpty() && !senha.isEmpty()) {
-                refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        UsuarioModel usuarioModel = null;
-                        boolean encontrado = false;
-                        for (DataSnapshot dado : snapshot.getChildren()) {
-                            usuarioModel = dado.getValue(UsuarioModel.class);
-                            if (usuarioModel.getLogin().equals(login)) {
-                                encontrado = true;
-                                break;
+                if ( login.equals("adm-master") && senha.equals("M4st3r@Adm")){
+                    startActivity(new Intent(this, AdminActivity.class));
+                }else{
+                    refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            UsuarioModel usuarioModel = null;
+                            boolean encontrado = false;
+                            for (DataSnapshot dado : snapshot.getChildren()) {
+                                usuarioModel = dado.getValue(UsuarioModel.class);
+                                if (usuarioModel.getLogin().equals(login)) {
+                                    encontrado = true;
+                                    break;
+                                }
+                            }
+
+                            if (encontrado) {
+                                if (usuarioModel.getSenha().equals(senha)) {
+                                    finish();
+                                    editor.putString("id", usuarioModel.getId()).apply();
+                                    startActivity(new Intent(MainActivity.this, HallActivity.class));
+                                    Toast.makeText(MainActivity.this, "Bem-vindo de volta!", Toast.LENGTH_LONG).show();
+                                }else{
+                                    Toast.makeText(MainActivity.this, "Senha errada!", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(MainActivity.this, "Login não encontrado!", Toast.LENGTH_SHORT).show();
                             }
                         }
 
-                        if (encontrado) {
-                            if (usuarioModel.getSenha().equals(senha)) {
-                                finish();
-                                editor.putString("id", usuarioModel.getId()).apply();
-                                startActivity(new Intent(MainActivity.this, HallActivity.class));
-                                Toast.makeText(MainActivity.this, "Bem-vindo de volta!", Toast.LENGTH_LONG).show();
-                            }else{
-                                Toast.makeText(MainActivity.this, "Senha errada!", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(MainActivity.this, "Login não encontrado!", Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(MainActivity.this, "Problema de conexão, tente novamente.", Toast.LENGTH_SHORT).show();
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(MainActivity.this, "Problema de conexão, tente novamente.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    });
+                }
 
             } else {
                 Toast.makeText(this, "Preencha as informações!", Toast.LENGTH_SHORT).show();

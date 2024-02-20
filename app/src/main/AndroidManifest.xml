@@ -13,6 +13,10 @@
         android:theme="@style/Theme.EnfermaGuia"
         tools:targetApi="31">
         <activity
+            android:name=".AdminActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
+            android:exported="false" />
+        <activity
             android:name=".HallActivity"
             android:exported="false" />
         <activity

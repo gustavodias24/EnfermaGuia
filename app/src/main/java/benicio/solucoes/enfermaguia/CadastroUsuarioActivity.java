@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Base64;
 
 import benicio.solucoes.enfermaguia.databinding.ActivityCadastroUsuarioBinding;
-import benicio.solucoes.enfermaguia.databinding.ActivityMainBinding;
+import benicio.solucoes.enfermaguia.model.UsuarioModel;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
@@ -66,7 +65,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                         }
 
                         if ( prosseguir ){
-                            refUsuarios.child(id).setValue(new UsuarioModel(id, login, senha, nome)).addOnCompleteListener( task -> {
+                            refUsuarios.child(id).setValue(new UsuarioModel(id, login, senha, nome)).addOnCompleteListener(task -> {
                                if ( task.isSuccessful() ){
                                    Toast.makeText(CadastroUsuarioActivity.this, "Usuário criado!", Toast.LENGTH_SHORT).show();
                                    editor.putString("id", id).apply();

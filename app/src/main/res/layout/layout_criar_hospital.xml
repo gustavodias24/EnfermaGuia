@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@color/azul_claro"
     android:fillViewport="true">
@@ -13,20 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/azul_claro"
-        android:gravity="center"
         android:orientation="vertical"
-        android:padding="8dp"
-        tools:context=".MainActivity">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center|center_horizontal"
-            android:text="EnfermaGuia"
-            android:textAlignment="center"
+            android:text="Realize o Cadastro"
             android:textColor="#FFFFFF"
             android:textSize="34sp"
             android:textStyle="bold" />
@@ -52,6 +46,26 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nomeField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Nome Hospital"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            app:boxStrokeColor="#FFFFFF"
+            app:hintTextColor="#FFFFFF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/senhaField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -60,38 +74,25 @@
             android:hint="Senha"
             android:textColorHint="#FFFFFF"
             app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="#FFFFFF">
+            app:hintTextColor="#FFFFFF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:password="true"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/entrar"
+            android:id="@+id/cadastro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/azul_fote"
-            android:text="Entrar"
+            android:text="Cadastrar"
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/fazerCadastro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Criar uma nova conta."
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
             android:textStyle="bold" />
 
     </LinearLayout>
