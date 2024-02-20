@@ -41,7 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (!prefs.getString("id", "").isEmpty()) {
             finish();
-            startActivity(new Intent(this, HallActivity.class));
+            if (prefs.getBoolean("isAdmin", false)) {
+                startActivity(new Intent(this, HospitalPainelActivity.class));
+            } else {
+                startActivity(new Intent(this, HallActivity.class));
+            }
         }
 
 
@@ -53,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (!login.isEmpty() && !senha.isEmpty()) {
 
-                if ( login.equals("adm-master") && senha.equals("M4st3r@Adm")){
+                if (login.equals("adm-master") && senha.equals("M4st3r@Adm")) {
                     startActivity(new Intent(this, AdminActivity.class));
-                }else{
+                } else {
                     refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -74,9 +78,15 @@ public class MainActivity extends AppCompatActivity {
                                 if (usuarioModel.getSenha().equals(senha)) {
                                     finish();
                                     editor.putString("id", usuarioModel.getId()).apply();
-                                    startActivity(new Intent(MainActivity.this, HallActivity.class));
+                                    if (usuarioModel.isAdmin()) {
+                                        editor.putBoolean("isAdmin", true).apply();
+                                        startActivity(new Intent(MainActivity.this, HospitalPainelActivity.class));
+                                    } else {
+                                        editor.putBoolean("isAdmin", false).apply();
+                                        startActivity(new Intent(MainActivity.this, HallActivity.class));
+                                    }
                                     Toast.makeText(MainActivity.this, "Bem-vindo de volta!", Toast.LENGTH_LONG).show();
-                                }else{
+                                } else {
                                     Toast.makeText(MainActivity.this, "Senha errada!", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
