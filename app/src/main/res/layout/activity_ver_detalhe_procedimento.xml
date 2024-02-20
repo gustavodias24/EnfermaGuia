@@ -14,4 +14,14 @@
         android:padding="8dp"
         tools:context=".VerDetalheProcedimentoActivity">
 
+        <Button
+            android:id="@+id/darSugestao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/azul_fote"
+            android:text="enviar sugestão"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
     </LinearLayout></ScrollView>

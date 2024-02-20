@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Realize o Cadastro"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/azul_fote"
             android:textSize="34sp"
             android:textStyle="bold" />
 
