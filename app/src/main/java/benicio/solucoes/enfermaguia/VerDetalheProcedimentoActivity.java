@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 import benicio.solucoes.enfermaguia.databinding.ActivityMainBinding;
@@ -107,6 +108,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
                             textDescri.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                             textDescri.setPadding(16, 0, 16, 0); // left, top, right, bottom
+                            textDescri.setVisibility(View.GONE);
                             textDescri.setText(info.getInfo());
                             textDescri.setTextSize(14);
                             textDescri.setTypeface(null, Typeface.BOLD);
@@ -152,6 +154,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                 String dataAtual = simpleDateFormat.format(new Date());
 
                 SugestaoModel sugestaoModel = new SugestaoModel();
+                sugestaoModel.setIdHospital(procedimentoModel.getIdHospital());
                 sugestaoModel.setId(UUID.randomUUID().toString());
                 sugestaoModel.setDataSugestao(dataAtual);
                 sugestaoModel.setIdProcedimento(procedimentoModel.getId());
@@ -187,7 +190,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    nomeUsuario = snapshot.getValue(UsuarioModel.class).getNome();
+                    nomeUsuario = Objects.requireNonNull(snapshot.getValue(UsuarioModel.class)).getNome();
                 }
             }
 

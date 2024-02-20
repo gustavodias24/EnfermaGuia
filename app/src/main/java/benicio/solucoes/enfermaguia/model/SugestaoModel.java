@@ -1,7 +1,14 @@
 package benicio.solucoes.enfermaguia.model;
 
 public class SugestaoModel {
-    String dataSugestao, info, nomeUsuario, id, nomeProcedimento, idProcedimento;
+    String dataSugestao, info, nomeUsuario, id, nomeProcedimento, idProcedimento, idHospital;
+
+    @Override
+    public String toString() {
+        return  "Usuário: " + nomeUsuario + " Data: " + dataSugestao + "\n" +
+                "Procedimento: " + nomeProcedimento + "\n" +
+                "Sugestão: " + info ;
+    }
 
     public SugestaoModel() {
     }
@@ -13,6 +20,14 @@ public class SugestaoModel {
         this.id = id;
         this.nomeProcedimento = nomeProcedimento;
         this.idProcedimento = idProcedimento;
+    }
+
+    public String getIdHospital() {
+        return idHospital;
+    }
+
+    public void setIdHospital(String idHospital) {
+        this.idHospital = idHospital;
     }
 
     public String getIdProcedimento() {

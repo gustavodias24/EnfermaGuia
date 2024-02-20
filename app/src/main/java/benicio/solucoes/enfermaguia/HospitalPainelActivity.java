@@ -10,8 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +44,7 @@ public class HospitalPainelActivity extends AppCompatActivity {
 
     private DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
     private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     private ActivityHospitalPainelBinding mainBinding;
     private Dialog dialogCriarProcedimento;
 
@@ -58,11 +64,13 @@ public class HospitalPainelActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
 
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        editor = prefs.edit();
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getSupportActionBar().setTitle("Painel Hospital");
 
         mainBinding.criarProcecimento.setOnClickListener(view -> dialogCriarProcedimento.show());
+        mainBinding.verSugestoes.setOnClickListener(view -> startActivity(new Intent(this, VerSugestoesActivity.class)));
 
         configurarDialogCriarProcedimento();
         configurarRecyclerProcedimento();
@@ -178,5 +186,21 @@ public class HospitalPainelActivity extends AppCompatActivity {
         rConteudo.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         adapterConteudo = new AdapterConteudo(listaConteudo, this);
         rConteudo.setAdapter(adapterConteudo);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if ( item.getItemId() == R.id.sair_conta){
+            finish();
+            editor.putString("id", "").apply();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }
