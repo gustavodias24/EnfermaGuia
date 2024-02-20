@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import benicio.solucoes.enfermaguia.R;
+import benicio.solucoes.enfermaguia.VerDetalheProcedimentoActivity;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 
 public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimentos.MyViewHolder> {
@@ -38,7 +39,10 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
         holder.nomeProcedimento.setText(procedimentoModel.getNomeProcedimento());
         holder.itemView.getRootView().setClickable(false);
         holder.btn_ir_ver_procedimento.setOnClickListener(view -> {
-
+            Intent i = new Intent(a, VerDetalheProcedimentoActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("idProcedimento", procedimentoModel.getId());
+            a.startActivity(i);
         });
 
     }
@@ -50,7 +54,7 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nomeProcedimento;
-        Button btn_ir_ver_procedimento;
+        ImageButton btn_ir_ver_procedimento;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
