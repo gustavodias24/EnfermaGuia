@@ -1,5 +1,6 @@
 package benicio.solucoes.enfermaguia;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -13,14 +14,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
 import benicio.solucoes.enfermaguia.adapter.AdapterConteudo;
+import benicio.solucoes.enfermaguia.adapter.AdapterProcedimentos;
 import benicio.solucoes.enfermaguia.databinding.ActivityCadastroUsuarioBinding;
 import benicio.solucoes.enfermaguia.databinding.ActivityHospitalPainelBinding;
 import benicio.solucoes.enfermaguia.databinding.ActivityMainBinding;
@@ -32,15 +38,18 @@ import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 public class HospitalPainelActivity extends AppCompatActivity {
 
     private DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
-
     private SharedPreferences prefs;
-
     private ActivityHospitalPainelBinding mainBinding;
     private Dialog dialogCriarProcedimento;
 
     private RecyclerView rConteudo;
     private List<ConteudoModel> listaConteudo = new ArrayList<>();
     private AdapterConteudo adapterConteudo;
+
+
+    private RecyclerView rProcedimentos;
+    private List<ProcedimentoModel> listaProcedimento = new ArrayList<>();
+    private AdapterProcedimentos adapterProcedimentos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,38 @@ public class HospitalPainelActivity extends AppCompatActivity {
         mainBinding.criarProcecimento.setOnClickListener(view -> dialogCriarProcedimento.show());
 
         configurarDialogCriarProcedimento();
+        configurarRecyclerProcedimento();
+    }
+
+    private void configurarRecyclerProcedimento() {
+        rProcedimentos = mainBinding.recyclerProcedimentos;
+        rProcedimentos.setLayoutManager(new LinearLayoutManager(this));
+        rProcedimentos.setHasFixedSize(true);
+        rProcedimentos.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        adapterProcedimentos = new AdapterProcedimentos(listaProcedimento, this);
+        rProcedimentos.setAdapter(adapterProcedimentos);
+
+        refProcedimentos.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    listaProcedimento.clear();
+                    for (DataSnapshot dado : snapshot.getChildren()) {
+                        ProcedimentoModel procedimentoModel = dado.getValue(ProcedimentoModel.class);
+                        if (procedimentoModel.getIdHospital().equals(prefs.getString("id", ""))) {
+                            listaProcedimento.add(procedimentoModel);
+                        }
+                        adapterProcedimentos.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -89,12 +130,12 @@ public class HospitalPainelActivity extends AppCompatActivity {
             if (nomeProcedimento.isEmpty()) {
                 Toast.makeText(this, "Adicione o Nome do Procedimento.", Toast.LENGTH_SHORT).show();
             } else {
-                String id = UUID.randomUUID().toString();
+                String id = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
                 ProcedimentoModel procedimentoModel = new ProcedimentoModel();
 
                 procedimentoModel.setNomeProcedimento(nomeProcedimento);
                 procedimentoModel.setId(id);
-                procedimentoModel.setId(prefs.getString("id", ""));
+                procedimentoModel.setIdHospital(prefs.getString("id", ""));
 
                 List<InfoProcedimento> listaInfoProcedimento = new ArrayList<>();
                 for (ConteudoModel conteudoPreview : listaConteudo) {
@@ -113,7 +154,7 @@ public class HospitalPainelActivity extends AppCompatActivity {
 
                 procedimentoModel.getListaInformacao().addAll(listaInfoProcedimento);
 
-                refProcedimentos.child(id).setValue(procedimentoModel).addOnCompleteListener(task -> {
+                refProcedimentos.child(procedimentoModel.getId()).setValue(procedimentoModel).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         listaConteudo.clear();
                         criarProcedimentoBinding.nomeField.getEditText().setText("");

@@ -13,9 +13,12 @@
         android:theme="@style/Theme.EnfermaGuia"
         tools:targetApi="31">
         <activity
-            android:name=".HospitalPainelActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
+            android:name=".VerDetalheProcedimentoActivity"
             android:exported="false" />
+        <activity
+            android:name=".HospitalPainelActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".AdminActivity"
             android:exported="false"
