@@ -1,6 +1,8 @@
 package benicio.solucoes.enfermaguia.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import benicio.solucoes.enfermaguia.HallActivity;
 import benicio.solucoes.enfermaguia.R;
 import benicio.solucoes.enfermaguia.model.UsuarioModel;
 
@@ -26,9 +29,19 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
 
     Activity c;
 
+    boolean isSelecao = false;
+    SharedPreferences.Editor editor;
+
     public AdapterHospitais(List<UsuarioModel> lista, Activity c) {
         this.lista = lista;
         this.c = c;
+    }
+
+    public AdapterHospitais(List<UsuarioModel> lista, Activity c, boolean isSelecao, SharedPreferences.Editor editor) {
+        this.lista = lista;
+        this.c = c;
+        this.isSelecao = isSelecao;
+        this.editor = editor;
     }
 
     @NonNull
@@ -40,12 +53,23 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         UsuarioModel hospital = lista.get(position);
-        
-        holder.infos.setText(hospital.toString());
-        holder.rmButton.setOnClickListener( view -> {
-            refUsuarios.child(hospital.getId()).setValue(null);
-            Toast.makeText(c, "Removido!", Toast.LENGTH_SHORT).show();
-        });
+        if ( isSelecao ){
+            holder.rmButton.setVisibility(View.GONE);
+            holder.infos.setText(hospital.getNome());
+            holder.itemView.getRootView().setOnClickListener(view -> {
+                editor.putString("idHospitalSelecionado", hospital.getId()).apply();
+                HallActivity.dialogSelecionaHospital.dismiss();
+                Toast.makeText(c, "Hospital " + hospital.getNome() + " Selecionado", Toast.LENGTH_SHORT).show();
+                HallActivity.buscarProcedimentos();
+            });
+        }else{
+            holder.infos.setText(hospital.toString());
+            holder.rmButton.setOnClickListener( view -> {
+                refUsuarios.child(hospital.getId()).setValue(null);
+                Toast.makeText(c, "Removido!", Toast.LENGTH_SHORT).show();
+            });
+        }
+
         
         
     }

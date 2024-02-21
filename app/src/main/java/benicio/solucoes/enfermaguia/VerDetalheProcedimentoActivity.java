@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ import benicio.solucoes.enfermaguia.model.UsuarioModel;
 import benicio.solucoes.enfermaguia.utils.Utils;
 
 public class VerDetalheProcedimentoActivity extends AppCompatActivity {
+    private SharedPreferences prefs;
     String nomeUsuario = "Anônimo";
     int idTitulo;
     int idBody;
@@ -58,6 +61,8 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Carregando...");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
 
         mainBinding.darSugestao.setOnClickListener(view -> dialogSugestao.show());
         configurarDialogSugestao();
@@ -186,7 +191,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
     private void pegarNomeUsuario() {
         DatabaseReference refUsuarios = FirebaseDatabase.getInstance().getReference().child("usuarios");
-        refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {
+        refUsuarios.child(prefs.getString("id", "")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -196,7 +201,6 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }

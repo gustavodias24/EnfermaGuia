@@ -30,6 +30,7 @@
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".HallActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
             android:exported="false" />
         <activity
             android:name=".CadastroUsuarioActivity"

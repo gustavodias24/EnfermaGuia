@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/azul_fote"
+    android:background="@color/azul_claro"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:ignore="MissingDefaultResource">
 
     <TextView
-        android:id="@+id/dados_user_hospital"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="TextView"
+        android:text="Selecione o Hospital"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/remover_user_hospital"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerHospitais"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="#FF0000"
-        android:text="remover"
-        android:textAllCaps="true"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp" />
+
 </LinearLayout>
