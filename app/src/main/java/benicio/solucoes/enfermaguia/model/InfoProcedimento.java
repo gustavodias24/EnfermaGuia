@@ -2,7 +2,7 @@ package benicio.solucoes.enfermaguia.model;
 
 public class InfoProcedimento {
     String info;
-    int tipo;
+    int tipo; // 0 eh titulo e 1 conteudo
 
     public InfoProcedimento(String info, int tipo) {
         this.info = info;

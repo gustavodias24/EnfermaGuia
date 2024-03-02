@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -70,6 +71,8 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
         b = getIntent().getExtras();
 
+
+
         assert b != null;
         String idProcedimento = b.getString("idProcedimento", "");
         if (!idProcedimento.isEmpty()) {
@@ -77,6 +80,15 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     procedimentoModel = task.getResult().getValue(ProcedimentoModel.class);
+
+                    mainBinding.compartilhar.setOnClickListener(view -> {
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, procedimentoModel.toString());
+                        startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+                    });
+
+
                     getSupportActionBar().setTitle(procedimentoModel.getNomeProcedimento());
 
 
@@ -97,7 +109,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                             textTitle.setPadding(16, 32, 16, 0); // left, top, right, bottom
                             textTitle.setText(info.getInfo());
                             textTitle.setTextColor(getResources().getColor(R.color.azul_fote));
-                            textTitle.setTextSize(24);
+                            textTitle.setTextSize(48);
                             textTitle.setTypeface(null, Typeface.BOLD);
                             mainBinding.layout.addView(textTitle);
                         } else {
@@ -115,7 +127,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                             textDescri.setPadding(16, 0, 16, 0); // left, top, right, bottom
                             textDescri.setVisibility(View.GONE);
                             textDescri.setText(info.getInfo());
-                            textDescri.setTextSize(14);
+                            textDescri.setTextSize(28);
                             textDescri.setTypeface(null, Typeface.BOLD);
                             mainBinding.layout.addView(textDescri);
 

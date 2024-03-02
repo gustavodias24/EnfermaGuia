@@ -74,6 +74,8 @@ public class HospitalPainelActivity extends AppCompatActivity {
 
         configurarDialogCriarProcedimento();
         configurarRecyclerProcedimento();
+
+        mainBinding.metricas.setOnClickListener( view -> startActivity(new Intent(this, MetricasA.class) ));
     }
 
     private void configurarRecyclerProcedimento() {
