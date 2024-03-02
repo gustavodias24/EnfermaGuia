@@ -30,12 +30,14 @@ import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 public class MetricasA extends AppCompatActivity {
 
     private DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
+    private DatabaseReference refAcessos = FirebaseDatabase.getInstance().getReference().child("acessos");
     private SharedPreferences prefs;
     private ActivityMetricasBinding mainBinding;
     private RecyclerView recyclerMetricas;
     private List<ProcedimentoModel> listaProcedimento = new ArrayList<>();
     private AdapterMetricas adapterMetricas;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,14 @@ public class MetricasA extends AppCompatActivity {
 
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         configurarRecyclerMetricas();
+
+        refAcessos.get().addOnCompleteListener( task -> {
+            if ( task.isSuccessful()){
+                mainBinding.acessosNoAplicativoText.setText("Acessos no Aplicativo: " + task.getResult().getValue(Integer.class));
+            }else{
+                mainBinding.acessosNoAplicativoText.setText("Acessos no Aplicativo: Erro de conexão!");
+            }
+        });
     }
 
     private void configurarRecyclerMetricas() {

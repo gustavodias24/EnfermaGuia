@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private DatabaseReference refUsuarios = FirebaseDatabase.getInstance().getReference().child("usuarios");
+    private DatabaseReference refAcessos = FirebaseDatabase.getInstance().getReference().child("acessos");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,17 @@ public class MainActivity extends AppCompatActivity {
                                         startActivity(new Intent(MainActivity.this, HallActivity.class));
                                     }
                                     Toast.makeText(MainActivity.this, "Bem-vindo de volta!", Toast.LENGTH_LONG).show();
+                                    refAcessos.get().addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            if (task.getResult().exists()) {
+                                                int countAtual = task.getResult().getValue(Integer.class);
+                                                countAtual++;
+
+                                                refAcessos.setValue(countAtual);
+
+                                            }
+                                        }
+                                    });
                                 } else {
                                     Toast.makeText(MainActivity.this, "Senha errada!", Toast.LENGTH_SHORT).show();
                                 }
