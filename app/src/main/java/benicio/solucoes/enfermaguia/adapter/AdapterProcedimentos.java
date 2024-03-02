@@ -7,9 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -18,6 +22,7 @@ import benicio.solucoes.enfermaguia.VerDetalheProcedimentoActivity;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 
 public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimentos.MyViewHolder> {
+    public static DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
     List<ProcedimentoModel> lista;
     Activity a;
 
@@ -39,10 +44,18 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
         holder.nomeProcedimento.setText(procedimentoModel.getNomeProcedimento());
         holder.itemView.getRootView().setClickable(false);
         holder.btn_ir_ver_procedimento.setOnClickListener(view -> {
-            Intent i = new Intent(a, VerDetalheProcedimentoActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra("idProcedimento", procedimentoModel.getId());
-            a.startActivity(i);
+            procedimentoModel.setAcessos(procedimentoModel.getAcessos() + 1);
+
+            refProcedimentos.child(procedimentoModel.getId()).setValue(procedimentoModel).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Intent i = new Intent(a, VerDetalheProcedimentoActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtra("idProcedimento", procedimentoModel.getId());
+                    a.startActivity(i);
+                } else {
+                    Toast.makeText(a, "Tente novamente!", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
     }

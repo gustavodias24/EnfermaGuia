@@ -72,7 +72,6 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
         b = getIntent().getExtras();
 
 
-
         assert b != null;
         String idProcedimento = b.getString("idProcedimento", "");
         if (!idProcedimento.isEmpty()) {
@@ -82,10 +81,20 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                     procedimentoModel = task.getResult().getValue(ProcedimentoModel.class);
 
                     mainBinding.compartilhar.setOnClickListener(view -> {
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.setType("text/plain");
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, procedimentoModel.toString());
-                        startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+                        procedimentoModel.setCompartilhamentos(
+                                procedimentoModel.getCompartilhamentos() + 1
+                        );
+                        refProcedimentos.child(procedimentoModel.getId()).setValue(procedimentoModel).addOnCompleteListener(tas1 -> {
+                            if (task.isSuccessful()) {
+                                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                                shareIntent.setType("text/plain");
+                                shareIntent.putExtra(Intent.EXTRA_TEXT, procedimentoModel.toString());
+                                startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+                            } else {
+                                Toast.makeText(this, "Tente Novamente...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     });
 
 
@@ -180,10 +189,17 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                 sugestaoModel.setNomeUsuario(nomeUsuario);
 
                 refSugestoes.child(sugestaoModel.getId()).setValue(sugestaoModel).addOnCompleteListener(task -> {
-                    if ( task.isSuccessful() ){
-                        Toast.makeText(this, "Sugestão Enviada com Sucesso!", Toast.LENGTH_SHORT).show();
-                        criarSugestaoBinding.sugestaoField.getEditText().setText("");
-                        dialogSugestao.dismiss();
+                    if (task.isSuccessful()) {
+                        procedimentoModel.setSugestoes(procedimentoModel.getSugestoes() + 1);
+                        refProcedimentos.child(procedimentoModel.getId()).setValue(procedimentoModel).addOnCompleteListener(task1 -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Sugestão Enviada com Sucesso!", Toast.LENGTH_SHORT).show();
+                                criarSugestaoBinding.sugestaoField.getEditText().setText("");
+                                dialogSugestao.dismiss();
+                            } else {
+                                Toast.makeText(this, "Tente Novamente...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
             }
