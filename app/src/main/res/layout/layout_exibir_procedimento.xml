@@ -5,6 +5,11 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
+    <CheckBox
+        android:id="@+id/checkBoxMarcarCompartilhar"
+        android:layout_width="60sp"
+        android:layout_height="60sp" />
+
     <TextView
         android:id="@+id/text_nome_procedimento"
         android:layout_width="match_parent"

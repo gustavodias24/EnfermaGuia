@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,12 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ProcedimentoModel procedimentoModel = lista.get(position);
 
+        holder.checkBoxMarcarCompartilhar.setChecked(false);
+
+        holder.checkBoxMarcarCompartilhar.setOnClickListener(view ->
+                procedimentoModel.setChecado(holder.checkBoxMarcarCompartilhar.isChecked())
+        );
+
         holder.nomeProcedimento.setText(procedimentoModel.getNomeProcedimento());
         holder.itemView.getRootView().setClickable(false);
         holder.btn_ir_ver_procedimento.setOnClickListener(view -> {
@@ -68,12 +75,14 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nomeProcedimento;
         ImageButton btn_ir_ver_procedimento;
+        CheckBox checkBoxMarcarCompartilhar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             nomeProcedimento = itemView.findViewById(R.id.text_nome_procedimento);
             btn_ir_ver_procedimento = itemView.findViewById(R.id.btn_ir_ver_procedimento);
+            checkBoxMarcarCompartilhar = itemView.findViewById(R.id.checkBoxMarcarCompartilhar);
         }
     }
 }

@@ -10,6 +10,15 @@ public class ProcedimentoModel {
     *
     * */
 
+    public boolean isChecado() {
+        return checado;
+    }
+
+    public void setChecado(boolean checado) {
+        this.checado = checado;
+    }
+
+    boolean checado;
     int compartilhamentos = 0;
     int acessos = 0;
     int sugestoes = 0;
