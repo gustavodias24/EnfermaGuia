@@ -59,9 +59,10 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        getSupportActionBar().setTitle("Carregando...");
+        getSupportActionBar().setTitle("Visualização");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
 
@@ -97,9 +98,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
                     });
 
-
-                    getSupportActionBar().setTitle(procedimentoModel.getNomeProcedimento());
-
+                    mainBinding.textTituloProcedimento.setText(procedimentoModel.getNomeProcedimento());
 
                     for (InfoProcedimento info : procedimentoModel.getListaInformacao()) {
                         if (info.getTipo() == 0) {

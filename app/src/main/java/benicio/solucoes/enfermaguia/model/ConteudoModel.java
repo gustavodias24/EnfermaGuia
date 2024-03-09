@@ -23,4 +23,7 @@ public class ConteudoModel {
         this.titulo = titulo;
         this.info = info;
     }
+
+    public ConteudoModel() {
+    }
 }

@@ -63,6 +63,21 @@ public class HospitalPainelActivity extends AppCompatActivity {
         configurarRecyclerProcedimento();
 
         mainBinding.metricas.setOnClickListener(view -> startActivity(new Intent(this, MetricasA.class)));
+
+        mainBinding.compartilhar.setOnClickListener(view -> {
+            List<ProcedimentoModel> listaParaCompartilharProcedimento = new ArrayList<>();
+            for (ProcedimentoModel procedimento : listaProcedimento) {
+                if (procedimento.isChecado()) {
+                    listaParaCompartilharProcedimento.add(procedimento);
+                }
+            }
+
+            if (listaParaCompartilharProcedimento.isEmpty()) {
+                Toast.makeText(this, "Selecione pelo menos 1 procedimento!", Toast.LENGTH_SHORT).show();
+            } else {
+                HallActivity.gerarPdfOS(listaParaCompartilharProcedimento, this);
+            }
+        });
     }
 
     private void configurarRecyclerProcedimento() {
@@ -70,7 +85,7 @@ public class HospitalPainelActivity extends AppCompatActivity {
         rProcedimentos.setLayoutManager(new LinearLayoutManager(this));
         rProcedimentos.setHasFixedSize(true);
         rProcedimentos.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapterProcedimentos = new AdapterProcedimentos(listaProcedimento, this);
+        adapterProcedimentos = new AdapterProcedimentos(listaProcedimento, this, true);
         rProcedimentos.setAdapter(adapterProcedimentos);
 
         refProcedimentos.addValueEventListener(new ValueEventListener() {

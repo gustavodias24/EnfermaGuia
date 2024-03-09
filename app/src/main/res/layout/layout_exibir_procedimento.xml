@@ -1,33 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="8dp">
 
-    <CheckBox
-        android:id="@+id/checkBoxMarcarCompartilhar"
-        android:layout_width="60sp"
-        android:layout_height="60sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/text_nome_procedimento"
+        <CheckBox
+            android:id="@+id/checkBoxMarcarCompartilhar"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:backgroundTint="@color/azul_fote"
+            android:buttonTint="@color/azul_fote"
+            android:checked="false"
+            android:drawableTint="@color/azul_fote"
+            android:foregroundTint="@color/azul_fote"
+            android:textColor="#CD1212"
+            android:textColorHighlight="@color/azul_fote"
+            android:textColorHint="@color/azul_fote"
+            android:textColorLink="@color/azul_fote"
+            app:buttonIconTint="@color/white"
+            app:buttonIconTintMode="add" />
+
+        <TextView
+            android:id="@+id/text_nome_procedimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_ir_ver_procedimento"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="fitStart"
+            android:src="@drawable/seta"
+            android:tint="@color/azul_fote" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/editarProcediemento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textSize="20sp"
+        android:backgroundTint="#FF9800"
+        android:text="Editar"
+        android:textAllCaps="true"
         android:textStyle="bold" />
 
-    <ImageButton
-        android:id="@+id/btn_ir_ver_procedimento"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:backgroundTint="#00FFFFFF"
-        android:scaleType="fitStart"
-        android:src="@drawable/seta"
-        android:tint="@color/azul_fote" />
+    <Button
+        android:id="@+id/excluirProcediemento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF0000"
+        android:text="excluir"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
 
 </LinearLayout>

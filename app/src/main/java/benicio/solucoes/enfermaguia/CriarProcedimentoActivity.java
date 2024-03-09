@@ -4,18 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -28,6 +34,7 @@ import benicio.solucoes.enfermaguia.databinding.ActivityMetricasBinding;
 import benicio.solucoes.enfermaguia.model.ConteudoModel;
 import benicio.solucoes.enfermaguia.model.InfoProcedimento;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
+import benicio.solucoes.enfermaguia.utils.ItemMoveCallback;
 
 public class CriarProcedimentoActivity extends AppCompatActivity {
     private DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
@@ -37,7 +44,10 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
     private AdapterConteudo adapterConteudo;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
+    private Bundle b;
+    private ProcedimentoModel procedimentoModel = new ProcedimentoModel();
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +61,17 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         editor = prefs.edit();
 
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
+//        AlertDialog.Builder b = new AlertDialog.Builder(this);
 
         configurarRecyclerConteudo();
+
+        b = getIntent().getExtras();
+        if (b != null && !b.getString("idProcedimento", "").isEmpty()) {
+            procedimentoModel.setId(b.getString("idProcedimento", ""));
+            configurarDadosDoProcediementoEdit();
+            mainBinding.cadastroUpdate.setText("EDITAR PROCEDIMENTO");
+            getSupportActionBar().setTitle("Editar Procedimento");
+        }
 
 
         mainBinding.pronto.setOnClickListener(view -> {
@@ -80,13 +98,15 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
                 Toast.makeText(this, "Adicione o Nome do Procedimento.", Toast.LENGTH_SHORT).show();
             } else {
                 String id = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
-                ProcedimentoModel procedimentoModel = new ProcedimentoModel();
 
                 procedimentoModel.setNomeProcedimento(nomeProcedimento);
-                procedimentoModel.setId(id);
+                if (procedimentoModel.getId().isEmpty()) {
+                    procedimentoModel.setId(id);
+                }
                 procedimentoModel.setIdHospital(prefs.getString("id", ""));
 
                 List<InfoProcedimento> listaInfoProcedimento = new ArrayList<>();
+
                 for (ConteudoModel conteudoPreview : listaConteudo) {
                     InfoProcedimento infoTitle = new InfoProcedimento();
                     infoTitle.setInfo(conteudoPreview.getTitulo());
@@ -98,23 +118,59 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
 
                     listaInfoProcedimento.add(infoTitle);
                     listaInfoProcedimento.add(infoBody);
-
                 }
 
+                procedimentoModel.getListaInformacao().clear();
                 procedimentoModel.getListaInformacao().addAll(listaInfoProcedimento);
+
 
                 refProcedimentos.child(procedimentoModel.getId()).setValue(procedimentoModel).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        listaConteudo.clear();
-                        mainBinding.nomeField.getEditText().setText("");
-                        Toast.makeText(this, "Procedimento Cadastrado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Operação Concluída!", Toast.LENGTH_LONG).show();
                         finish();
-                        startActivity(new Intent(this, CriarProcedimentoActivity.class));
                     }
                 });
 
             }
 
+        });
+    }
+
+    private void configurarDadosDoProcediementoEdit() {
+        refProcedimentos.child(procedimentoModel.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    procedimentoModel = snapshot.getValue(ProcedimentoModel.class);
+                    mainBinding.nomeField.getEditText().setText(procedimentoModel.getNomeProcedimento());
+
+                    ConteudoModel conteudoModel;
+                    for (int i = 0; i < procedimentoModel.getListaInformacao().size(); i += 2) {
+                        conteudoModel = new ConteudoModel(); // Criar uma nova instância em cada iteração
+
+                        InfoProcedimento infoTitulo = procedimentoModel.getListaInformacao().get(i);
+                        InfoProcedimento infoInfo = procedimentoModel.getListaInformacao().get(i + 1);
+
+                        if (infoTitulo.getTipo() == 0) {
+                            conteudoModel.setTitulo(infoTitulo.getInfo());
+                            conteudoModel.setInfo(infoInfo.getInfo());
+                        } else {
+                            conteudoModel.setTitulo(infoInfo.getInfo());
+                            conteudoModel.setInfo(infoTitulo.getInfo());
+                        }
+
+                        listaConteudo.add(conteudoModel);
+                    }
+                    adapterConteudo.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
     }
 
@@ -125,6 +181,10 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
         rConteudo.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         adapterConteudo = new AdapterConteudo(listaConteudo, this);
         rConteudo.setAdapter(adapterConteudo);
+
+        ItemTouchHelper.Callback callback = new ItemMoveCallback(adapterConteudo);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(rConteudo);
     }
 
     @Override

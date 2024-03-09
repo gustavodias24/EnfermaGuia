@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -93,7 +94,7 @@ public class HallActivity extends AppCompatActivity {
             if (listaParaCompartilharProcedimento.isEmpty()) {
                 Toast.makeText(this, "Selecione pelo menos 1 procedimento!", Toast.LENGTH_SHORT).show();
             } else {
-                gerarPdfOS(listaParaCompartilharProcedimento);
+                gerarPdfOS(listaParaCompartilharProcedimento, this);
             }
         });
 
@@ -148,7 +149,7 @@ public class HallActivity extends AppCompatActivity {
         rProcedimentos.setLayoutManager(new LinearLayoutManager(this));
         rProcedimentos.setHasFixedSize(true);
         rProcedimentos.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapterProcedimentos = new AdapterProcedimentos(listaProcedimento, this);
+        adapterProcedimentos = new AdapterProcedimentos(listaProcedimento, this, false);
         rProcedimentos.setAdapter(adapterProcedimentos);
 
         buscarProcedimentos();
@@ -195,14 +196,14 @@ public class HallActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void gerarPdfOS(List<ProcedimentoModel> listaProcedimento) {
+    public static void gerarPdfOS(List<ProcedimentoModel> listaProcedimento, Activity a) {
 
-        Bitmap bmpTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.templaterelatorio);
+        Bitmap bmpTemplate = BitmapFactory.decodeResource(a.getResources(), R.drawable.templaterelatorio);
         Bitmap scaledbmpTemplate = Bitmap.createScaledBitmap(bmpTemplate, 792, 1120, false);
         int pageHeight = 1120;
         int pagewidth = 792;
 
-        int posTituloX = 300;
+//        int posTituloX = 300;
         int posNormalX = 24;
 
         PdfDocument pdfDocument = new PdfDocument();
@@ -220,11 +221,12 @@ public class HallActivity extends AppCompatActivity {
 
         title.setTextSize(24);
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        title.setColor(ContextCompat.getColor(this, R.color.black));
+        title.setColor(ContextCompat.getColor(a, R.color.black));
+        title.setUnderlineText(true);
 
         restante.setTextSize(16);
         restante.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        restante.setColor(ContextCompat.getColor(this, R.color.black));
+        restante.setColor(ContextCompat.getColor(a, R.color.black));
 
         int valorY = 24;
 
@@ -237,8 +239,12 @@ public class HallActivity extends AppCompatActivity {
                 valorY = 24; // Reinicia o valorY para começar a partir do topo da nova página
             }
 
-            canvas.drawText(procedimentoModel.getNomeProcedimento(), posTituloX, valorY, title);
             valorY += 48;
+
+            canvas.drawText(procedimentoModel.getNomeProcedimento(), posNormalX, valorY, title);
+
+            valorY += 48;
+
             for (InfoProcedimento info : procedimentoModel.getListaInformacao()) {
                 Paint paintAtual;
                 if (info.getTipo() == 0) {
@@ -246,6 +252,7 @@ public class HallActivity extends AppCompatActivity {
                 } else {
                     paintAtual = restante;
                 }
+
 
                 for (String texto : info.getInfo().split("\n")) {
                     if (valorY >= pageHeight) {
@@ -277,9 +284,9 @@ public class HallActivity extends AppCompatActivity {
 
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
-            Toast.makeText(this, "PDF salvo em Documents/EnfermaGuia", Toast.LENGTH_SHORT).show();
+            Toast.makeText(a, "PDF salvo em Documents/EnfermaGuia", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            AlertDialog.Builder b = new AlertDialog.Builder(a);
             b.setTitle("Aviso");
             b.setMessage(e.getMessage());
             b.setPositiveButton("Fechar", null);
@@ -287,19 +294,19 @@ public class HallActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         pdfDocument.close();
-        compartilharPDFViaWhatsApp(file);
+        compartilharPDFViaWhatsApp(file, a);
     }
 
-    private void compartilharPDFViaWhatsApp(File file) {
+    public static void compartilharPDFViaWhatsApp(File file, Activity a) {
 
-        Uri contentUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+        Uri contentUri = FileProvider.getUriForFile(a, a.getPackageName() + ".provider", file);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("application/pdf");
         intent.putExtra(Intent.EXTRA_STREAM, contentUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        startActivity(intent);
+        a.startActivity(intent);
 
     }
 

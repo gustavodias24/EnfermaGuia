@@ -23,7 +23,7 @@ public class ProcedimentoModel {
     int acessos = 0;
     int sugestoes = 0;
     String nomeProcedimento;
-    String id, idHospital;
+    String id = "", idHospital;
 
     List<InfoProcedimento> listaInformacao = new ArrayList<>();
 

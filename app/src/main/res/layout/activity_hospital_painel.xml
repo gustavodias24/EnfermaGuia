@@ -62,6 +62,19 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/compartilhar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFC107"
+            android:text="Compartilhar Selecionados"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:icon="@drawable/share"
+            app:iconGravity="textStart"
+            app:iconSize="15dp" />
+
 
         <TextView
             android:id="@+id/textView2"

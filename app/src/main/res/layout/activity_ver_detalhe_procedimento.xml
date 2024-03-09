@@ -26,6 +26,19 @@
             app:icon="@drawable/tip"
             app:iconGravity="textStart" />
 
+        <TextView
+            android:id="@+id/textTituloProcedimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="loading..."
+            android:textAllCaps="true"
+            android:textColor="@color/azul_medio"
+            android:textColorHint="#000000"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/compartilhar"
             android:layout_width="match_parent"

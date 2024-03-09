@@ -15,8 +15,9 @@ import java.util.List;
 
 import benicio.solucoes.enfermaguia.R;
 import benicio.solucoes.enfermaguia.model.ConteudoModel;
+import benicio.solucoes.enfermaguia.utils.ItemMoveCallback;
 
-public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyViewHolder> {
+public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyViewHolder> implements ItemMoveCallback.ItemTouchHelperContract {
 
     List<ConteudoModel> lista;
     Activity c;
@@ -48,6 +49,13 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
     @Override
     public int getItemCount() {
         return lista.size();
+    }
+
+    @Override
+    public void onRowMoved(int fromPosition, int toPosition) {
+        ConteudoModel item = lista.remove(fromPosition);
+        lista.add(toPosition, item);
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
