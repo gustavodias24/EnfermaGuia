@@ -2,41 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
-
+    android:padding="8dp"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_conteudo_titulo"
+        android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Edite"
         android:textColor="#000000"
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/text_conteudo_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="#000000" />
-
-    <Button
-        android:id="@+id/remover_conteudo"
+    <EditText
+        android:id="@+id/edtTextoConteudo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#FF0000"
-        android:text="Remover"
-        android:textAllCaps="true" />
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Texto"
+        android:inputType="textMultiLine" />
 
     <Button
-        android:id="@+id/editar_conteudo_t"
+        android:id="@+id/pronto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#FF9800"
-        android:text="Editar"
-        android:textAllCaps="true" />
+        android:backgroundTint="#4CAF50"
+        android:text="PRONTO"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 </LinearLayout>

@@ -33,6 +33,7 @@ import benicio.solucoes.enfermaguia.databinding.ActivityHospitalPainelBinding;
 import benicio.solucoes.enfermaguia.model.ConteudoModel;
 import benicio.solucoes.enfermaguia.model.InfoProcedimento;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
+import benicio.solucoes.enfermaguia.utils.PDFGenerator;
 
 public class HospitalPainelActivity extends AppCompatActivity {
 
@@ -75,7 +76,8 @@ public class HospitalPainelActivity extends AppCompatActivity {
             if (listaParaCompartilharProcedimento.isEmpty()) {
                 Toast.makeText(this, "Selecione pelo menos 1 procedimento!", Toast.LENGTH_SHORT).show();
             } else {
-                HallActivity.gerarPdfOS(listaParaCompartilharProcedimento, this);
+//                HallActivity.gerarPdfOS(listaParaCompartilharProcedimento, this);
+                PDFGenerator.generateAndSharePDF(this, listaParaCompartilharProcedimento);
             }
         });
     }

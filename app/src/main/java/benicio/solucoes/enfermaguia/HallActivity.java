@@ -52,6 +52,7 @@ import benicio.solucoes.enfermaguia.databinding.LayoutSelecionarHospitalBinding;
 import benicio.solucoes.enfermaguia.model.InfoProcedimento;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 import benicio.solucoes.enfermaguia.model.UsuarioModel;
+import benicio.solucoes.enfermaguia.utils.PDFGenerator;
 
 public class HallActivity extends AppCompatActivity {
 
@@ -94,7 +95,8 @@ public class HallActivity extends AppCompatActivity {
             if (listaParaCompartilharProcedimento.isEmpty()) {
                 Toast.makeText(this, "Selecione pelo menos 1 procedimento!", Toast.LENGTH_SHORT).show();
             } else {
-                gerarPdfOS(listaParaCompartilharProcedimento, this);
+//                gerarPdfOS(listaParaCompartilharProcedimento, this);
+                PDFGenerator.generateAndSharePDF(this, listaParaCompartilharProcedimento);
             }
         });
 
@@ -196,118 +198,118 @@ public class HallActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public static void gerarPdfOS(List<ProcedimentoModel> listaProcedimento, Activity a) {
+//    public static void gerarPdfOS(List<ProcedimentoModel> listaProcedimento, Activity a) {
+//
+//        Bitmap bmpTemplate = BitmapFactory.decodeResource(a.getResources(), R.drawable.templaterelatorio);
+//        Bitmap scaledbmpTemplate = Bitmap.createScaledBitmap(bmpTemplate, 792, 1120, false);
+//        int pageHeight = 1120;
+//        int pagewidth = 792;
+//
+////        int posTituloX = 300;
+//        int posNormalX = 24;
+//
+//        PdfDocument pdfDocument = new PdfDocument();
+//
+//        Paint paint = new Paint();
+//        Paint title = new Paint();
+//        Paint restante = new Paint();
+//
+//        PdfDocument.PageInfo mypageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, 1).create();
+//        PdfDocument.Page currentPage = pdfDocument.startPage(mypageInfo);
+//
+//        Canvas canvas = currentPage.getCanvas();
+//
+//        canvas.drawBitmap(scaledbmpTemplate, 1, 1, paint);
+//
+//        title.setTextSize(24);
+//        title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+//        title.setColor(ContextCompat.getColor(a, R.color.black));
+//        title.setUnderlineText(true);
+//
+//        restante.setTextSize(16);
+//        restante.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+//        restante.setColor(ContextCompat.getColor(a, R.color.black));
+//
+//        int valorY = 24;
+//
+//        for (ProcedimentoModel procedimentoModel : listaProcedimento) {
+//            if (valorY >= pageHeight) {
+//                pdfDocument.finishPage(currentPage); // Finaliza a página atual
+//                PdfDocument.PageInfo newPageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, pdfDocument.getPages().size() + 1).create();
+//                currentPage = pdfDocument.startPage(newPageInfo); // Começa uma nova página
+//                canvas = currentPage.getCanvas(); // Obtém o canvas da nova página
+//                valorY = 24; // Reinicia o valorY para começar a partir do topo da nova página
+//            }
+//
+//            valorY += 48;
+//
+//            canvas.drawText(procedimentoModel.getNomeProcedimento(), posNormalX, valorY, title);
+//
+//            valorY += 48;
+//
+//            for (InfoProcedimento info : procedimentoModel.getListaInformacao()) {
+//                Paint paintAtual;
+//                if (info.getTipo() == 0) {
+//                    paintAtual = title;
+//                } else {
+//                    paintAtual = restante;
+//                }
+//
+//
+//                for (String texto : info.getInfo().split("\n")) {
+//                    if (valorY >= pageHeight) {
+//                        pdfDocument.finishPage(currentPage); // Finaliza a página atual
+//                        PdfDocument.PageInfo newPageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, pdfDocument.getPages().size() + 1).create();
+//                        currentPage = pdfDocument.startPage(newPageInfo); // Começa uma nova página
+//                        canvas = currentPage.getCanvas(); // Obtém o canvas da nova página
+//                        valorY = 24; // Reinicia o valorY para começar a partir do topo da nova página
+//                    }
+//                    canvas.drawText(texto, posNormalX, valorY, paintAtual);
+//                    valorY += 24;
+//                }
+//            }
+//        }
+//
+//        pdfDocument.finishPage(currentPage);
+//
+//        File documentosDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+//
+//        File kaizenProjetosDir = new File(documentosDir, "EnfermaGuia");
+//        if (!kaizenProjetosDir.exists()) {
+//            kaizenProjetosDir.mkdirs();
+//        }
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
+//        String data = simpleDateFormat.format(new Date());
+//        String nomeArquivo = "guia_" + data + "_" + UUID.randomUUID().toString() + ".pdf";
+//
+//        File file = new File(kaizenProjetosDir, nomeArquivo);
+//
+//        try {
+//            pdfDocument.writeTo(new FileOutputStream(file));
+//            Toast.makeText(a, "PDF salvo em Documents/EnfermaGuia", Toast.LENGTH_SHORT).show();
+//        } catch (IOException e) {
+//            AlertDialog.Builder b = new AlertDialog.Builder(a);
+//            b.setTitle("Aviso");
+//            b.setMessage(e.getMessage());
+//            b.setPositiveButton("Fechar", null);
+//            b.create().show();
+//            e.printStackTrace();
+//        }
+//        pdfDocument.close();
+//        compartilharPDFViaWhatsApp(file, a);
+//    }
 
-        Bitmap bmpTemplate = BitmapFactory.decodeResource(a.getResources(), R.drawable.templaterelatorio);
-        Bitmap scaledbmpTemplate = Bitmap.createScaledBitmap(bmpTemplate, 792, 1120, false);
-        int pageHeight = 1120;
-        int pagewidth = 792;
-
-//        int posTituloX = 300;
-        int posNormalX = 24;
-
-        PdfDocument pdfDocument = new PdfDocument();
-
-        Paint paint = new Paint();
-        Paint title = new Paint();
-        Paint restante = new Paint();
-
-        PdfDocument.PageInfo mypageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, 1).create();
-        PdfDocument.Page currentPage = pdfDocument.startPage(mypageInfo);
-
-        Canvas canvas = currentPage.getCanvas();
-
-        canvas.drawBitmap(scaledbmpTemplate, 1, 1, paint);
-
-        title.setTextSize(24);
-        title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        title.setColor(ContextCompat.getColor(a, R.color.black));
-        title.setUnderlineText(true);
-
-        restante.setTextSize(16);
-        restante.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        restante.setColor(ContextCompat.getColor(a, R.color.black));
-
-        int valorY = 24;
-
-        for (ProcedimentoModel procedimentoModel : listaProcedimento) {
-            if (valorY >= pageHeight) {
-                pdfDocument.finishPage(currentPage); // Finaliza a página atual
-                PdfDocument.PageInfo newPageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, pdfDocument.getPages().size() + 1).create();
-                currentPage = pdfDocument.startPage(newPageInfo); // Começa uma nova página
-                canvas = currentPage.getCanvas(); // Obtém o canvas da nova página
-                valorY = 24; // Reinicia o valorY para começar a partir do topo da nova página
-            }
-
-            valorY += 48;
-
-            canvas.drawText(procedimentoModel.getNomeProcedimento(), posNormalX, valorY, title);
-
-            valorY += 48;
-
-            for (InfoProcedimento info : procedimentoModel.getListaInformacao()) {
-                Paint paintAtual;
-                if (info.getTipo() == 0) {
-                    paintAtual = title;
-                } else {
-                    paintAtual = restante;
-                }
-
-
-                for (String texto : info.getInfo().split("\n")) {
-                    if (valorY >= pageHeight) {
-                        pdfDocument.finishPage(currentPage); // Finaliza a página atual
-                        PdfDocument.PageInfo newPageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, pdfDocument.getPages().size() + 1).create();
-                        currentPage = pdfDocument.startPage(newPageInfo); // Começa uma nova página
-                        canvas = currentPage.getCanvas(); // Obtém o canvas da nova página
-                        valorY = 24; // Reinicia o valorY para começar a partir do topo da nova página
-                    }
-                    canvas.drawText(texto, posNormalX, valorY, paintAtual);
-                    valorY += 24;
-                }
-            }
-        }
-
-        pdfDocument.finishPage(currentPage);
-
-        File documentosDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-
-        File kaizenProjetosDir = new File(documentosDir, "EnfermaGuia");
-        if (!kaizenProjetosDir.exists()) {
-            kaizenProjetosDir.mkdirs();
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
-        String data = simpleDateFormat.format(new Date());
-        String nomeArquivo = "guia_" + data + "_" + UUID.randomUUID().toString() + ".pdf";
-
-        File file = new File(kaizenProjetosDir, nomeArquivo);
-
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-            Toast.makeText(a, "PDF salvo em Documents/EnfermaGuia", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            AlertDialog.Builder b = new AlertDialog.Builder(a);
-            b.setTitle("Aviso");
-            b.setMessage(e.getMessage());
-            b.setPositiveButton("Fechar", null);
-            b.create().show();
-            e.printStackTrace();
-        }
-        pdfDocument.close();
-        compartilharPDFViaWhatsApp(file, a);
-    }
-
-    public static void compartilharPDFViaWhatsApp(File file, Activity a) {
-
-        Uri contentUri = FileProvider.getUriForFile(a, a.getPackageName() + ".provider", file);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("application/pdf");
-        intent.putExtra(Intent.EXTRA_STREAM, contentUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        a.startActivity(intent);
-
-    }
+//    public static void compartilharPDFViaWhatsApp(File file, Activity a) {
+//
+//        Uri contentUri = FileProvider.getUriForFile(a, a.getPackageName() + ".provider", file);
+//
+//        Intent intent = new Intent(Intent.ACTION_SEND);
+//        intent.setType("application/pdf");
+//        intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//        a.startActivity(intent);
+//
+//    }
 
 }

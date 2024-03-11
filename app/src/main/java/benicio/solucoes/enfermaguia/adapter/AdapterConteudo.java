@@ -2,11 +2,15 @@ package benicio.solucoes.enfermaguia.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.ImageDecoder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import benicio.solucoes.enfermaguia.R;
+import benicio.solucoes.enfermaguia.databinding.LayoutEditarTopicoBinding;
 import benicio.solucoes.enfermaguia.model.ConteudoModel;
 import benicio.solucoes.enfermaguia.utils.ItemMoveCallback;
 
@@ -21,6 +26,8 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
 
     List<ConteudoModel> lista;
     Activity c;
+    Dialog dialogEdt = null;
+
 
     public AdapterConteudo(List<ConteudoModel> lista, Activity c) {
         this.lista = lista;
@@ -39,6 +46,24 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
         ConteudoModel conteudoModel = lista.get(position);
         holder.titulo.setText(conteudoModel.getTitulo());
         holder.info.setText(conteudoModel.getInfo());
+
+        holder.itemView.getRootView().setClickable(false);
+
+        holder.editar_conteudo_t.setOnClickListener(view -> {
+            AlertDialog.Builder b = new AlertDialog.Builder(c);
+            b.setCancelable(false);
+            LayoutEditarTopicoBinding editarTopicoBinding = LayoutEditarTopicoBinding.inflate(c.getLayoutInflater());
+
+            editarTopicoBinding.edtTextoConteudo.setText(conteudoModel.getInfo());
+            editarTopicoBinding.pronto.setOnClickListener(prontoView -> {
+                this.notifyDataSetChanged();
+                conteudoModel.setInfo(editarTopicoBinding.edtTextoConteudo.getText().toString());
+                dialogEdt.dismiss();
+            });
+            b.setView(editarTopicoBinding.getRoot());
+            dialogEdt = b.create();
+            dialogEdt.show();
+        });
 
         holder.remover_conteudo.setOnClickListener( view -> {
             lista.remove(position);
@@ -60,12 +85,13 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView titulo, info;
-        Button remover_conteudo;
+        Button remover_conteudo, editar_conteudo_t;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             titulo  = itemView.findViewById(R.id.text_conteudo_titulo);
             info  = itemView.findViewById(R.id.text_conteudo_info);
             remover_conteudo  = itemView.findViewById(R.id.remover_conteudo);
+            editar_conteudo_t  = itemView.findViewById(R.id.editar_conteudo_t);
         }
     }
 }
