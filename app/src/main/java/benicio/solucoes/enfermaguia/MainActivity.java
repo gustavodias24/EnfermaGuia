@@ -1,6 +1,7 @@
 package benicio.solucoes.enfermaguia;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -18,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import benicio.solucoes.enfermaguia.databinding.ActivityMainBinding;
 import benicio.solucoes.enfermaguia.model.UsuarioModel;
+import benicio.solucoes.enfermaguia.utils.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,71 +53,83 @@ public class MainActivity extends AppCompatActivity {
 
 
         mainBinding.entrar.setOnClickListener(view -> {
-            String login, senha;
+            if (NetworkUtils.isNetworkAvailable(this)){
+                String login, senha;
 
-            login = mainBinding.loginField.getEditText().getText().toString().trim();
-            senha = mainBinding.senhaField.getEditText().getText().toString().trim();
+                login = mainBinding.loginField.getEditText().getText().toString().trim();
+                senha = mainBinding.senhaField.getEditText().getText().toString().trim();
 
-            if (!login.isEmpty() && !senha.isEmpty()) {
+                if (!login.isEmpty() && !senha.isEmpty()) {
 
-                if (login.equals("adm-master") && senha.equals("M4st3r@Adm")) {
-                    startActivity(new Intent(this, AdminActivity.class));
-                } else {
-                    refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                            UsuarioModel usuarioModel = null;
-                            boolean encontrado = false;
-                            for (DataSnapshot dado : snapshot.getChildren()) {
-                                usuarioModel = dado.getValue(UsuarioModel.class);
-                                if (usuarioModel.getLogin().equals(login)) {
-                                    encontrado = true;
-                                    break;
-                                }
-                            }
-
-                            if (encontrado) {
-                                if (usuarioModel.getSenha().equals(senha)) {
-                                    finish();
-                                    editor.putString("id", usuarioModel.getId()).apply();
-                                    if (usuarioModel.isAdmin()) {
-                                        editor.putBoolean("isAdmin", true).apply();
-                                        startActivity(new Intent(MainActivity.this, HospitalPainelActivity.class));
-                                    } else {
-                                        editor.putBoolean("isAdmin", false).apply();
-                                        startActivity(new Intent(MainActivity.this, HallActivity.class));
-                                    }
-                                    Toast.makeText(MainActivity.this, "Bem-vindo de volta!", Toast.LENGTH_LONG).show();
-                                    refAcessos.get().addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            if (task.getResult().exists()) {
-                                                int countAtual = task.getResult().getValue(Integer.class);
-                                                countAtual++;
-
-                                                refAcessos.setValue(countAtual);
-
-                                            }
+                    if (login.equals("adm-master") && senha.equals("M4st3r@Adm")) {
+                        startActivity(new Intent(this, AdminActivity.class));
+                    } else {
+                        refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.exists()){
+                                    UsuarioModel usuarioModel = null;
+                                    boolean encontrado = false;
+                                    for (DataSnapshot dado : snapshot.getChildren()) {
+                                        usuarioModel = dado.getValue(UsuarioModel.class);
+                                        if (usuarioModel.getLogin().equals(login)) {
+                                            encontrado = true;
+                                            break;
                                         }
-                                    });
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Senha errada!", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    if (encontrado) {
+                                        if (usuarioModel.getSenha().equals(senha)) {
+                                            finish();
+                                            editor.putString("id", usuarioModel.getId()).apply();
+                                            if (usuarioModel.isAdmin()) {
+                                                editor.putBoolean("isAdmin", true).apply();
+                                                startActivity(new Intent(MainActivity.this, HospitalPainelActivity.class));
+                                            } else {
+                                                editor.putBoolean("isAdmin", false).apply();
+                                                startActivity(new Intent(MainActivity.this, HallActivity.class));
+                                            }
+                                            Toast.makeText(MainActivity.this, "Bem-vindo de volta!", Toast.LENGTH_LONG).show();
+                                            refAcessos.get().addOnCompleteListener(task -> {
+                                                if (task.isSuccessful()) {
+                                                    if (task.getResult().exists()) {
+                                                        int countAtual = task.getResult().getValue(Integer.class);
+                                                        countAtual++;
+
+                                                        refAcessos.setValue(countAtual);
+
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(MainActivity.this, "Senha errada!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "Login não encontrado!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }else{
+                                    Toast.makeText(MainActivity.this, "Problema de conexão, tente novamente.", Toast.LENGTH_SHORT).show();
                                 }
-                            } else {
-                                Toast.makeText(MainActivity.this, "Login não encontrado!", Toast.LENGTH_SHORT).show();
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(MainActivity.this, "Problema de conexão, tente novamente.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(MainActivity.this, "Problema de conexão, tente novamente.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                } else {
+                    Toast.makeText(this, "Preencha as informações!", Toast.LENGTH_SHORT).show();
                 }
-
-            } else {
-                Toast.makeText(this, "Preencha as informações!", Toast.LENGTH_SHORT).show();
+            }else{
+                AlertDialog.Builder b = new AlertDialog.Builder(this);
+                b.setTitle("AVISO!");
+                b.setMessage("Você está sem uma conexão de internet aceitável, tente novamente com a conexão!");
+                b.setPositiveButton("ok", null);
+                b.create().show();
             }
+
         });
 
 
