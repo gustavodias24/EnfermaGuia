@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
                                                 editor.putBoolean("isAdmin", false).apply();
                                                 startActivity(new Intent(MainActivity.this, HallActivity.class));
                                             }
+
+                                            editor.putString("nomeUser", usuarioModel.getNome()).apply();
+
                                             Toast.makeText(MainActivity.this, "Bem-vindo de volta!", Toast.LENGTH_LONG).show();
                                             refAcessos.get().addOnCompleteListener(task -> {
                                                 if (task.isSuccessful()) {

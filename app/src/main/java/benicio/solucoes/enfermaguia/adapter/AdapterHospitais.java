@@ -60,6 +60,7 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
                 editor.putString("idHospitalSelecionado", hospital.getId()).apply();
                 HallActivity.dialogSelecionaHospital.dismiss();
                 Toast.makeText(c, "Hospital " + hospital.getNome() + " Selecionado", Toast.LENGTH_SHORT).show();
+                HallActivity.setNomeHospitalAtual();
                 HallActivity.buscarProcedimentos();
             });
         }else{

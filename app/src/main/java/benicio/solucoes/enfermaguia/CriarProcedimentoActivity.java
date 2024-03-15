@@ -179,7 +179,7 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
         rConteudo.setLayoutManager(new LinearLayoutManager(this));
         rConteudo.setHasFixedSize(true);
         rConteudo.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapterConteudo = new AdapterConteudo(listaConteudo, this);
+        adapterConteudo = new AdapterConteudo(listaConteudo, this, rConteudo);
         rConteudo.setAdapter(adapterConteudo);
 
         ItemTouchHelper.Callback callback = new ItemMoveCallback(adapterConteudo);
@@ -188,9 +188,24 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        perguntarSaida();
+    }
+
+    private void perguntarSaida() {
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle("Aviso!");
+        b.setMessage("Você quer realmente sair da tela atual?");
+        b.setNegativeButton("Não", null);
+        b.setPositiveButton("Sim", (d, i) -> finish()
+        );
+        b.create().show();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            perguntarSaida();
         }
         return super.onOptionsItemSelected(item);
     }

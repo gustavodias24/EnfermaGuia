@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.ImageDecoder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -27,11 +29,13 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
     List<ConteudoModel> lista;
     Activity c;
     Dialog dialogEdt = null;
+    RecyclerView r;
 
 
-    public AdapterConteudo(List<ConteudoModel> lista, Activity c) {
+    public AdapterConteudo(List<ConteudoModel> lista, Activity c, RecyclerView r) {
         this.lista = lista;
         this.c = c;
+        this.r = r;
     }
 
     @NonNull
@@ -40,7 +44,7 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_exibir_conteudo, parent, false));
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ConteudoModel conteudoModel = lista.get(position);
@@ -54,21 +58,38 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
             b.setCancelable(false);
             LayoutEditarTopicoBinding editarTopicoBinding = LayoutEditarTopicoBinding.inflate(c.getLayoutInflater());
 
+            editarTopicoBinding.textEditando.setText("Edite " + conteudoModel.getTitulo());
+
+            editarTopicoBinding.edtTitulo.setText(conteudoModel.getTitulo());
             editarTopicoBinding.edtTextoConteudo.setText(conteudoModel.getInfo());
+
+            editarTopicoBinding.pronto2.setOnClickListener(pronto2View -> {
+
+                funcaoPronto(conteudoModel, editarTopicoBinding, position);
+            });
             editarTopicoBinding.pronto.setOnClickListener(prontoView -> {
-                this.notifyDataSetChanged();
-                conteudoModel.setInfo(editarTopicoBinding.edtTextoConteudo.getText().toString());
-                dialogEdt.dismiss();
+                funcaoPronto(conteudoModel, editarTopicoBinding, position);
             });
             b.setView(editarTopicoBinding.getRoot());
             dialogEdt = b.create();
             dialogEdt.show();
         });
 
-        holder.remover_conteudo.setOnClickListener( view -> {
+        holder.remover_conteudo.setOnClickListener(view -> {
             lista.remove(position);
             this.notifyDataSetChanged();
         });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void funcaoPronto(ConteudoModel conteudoModel, LayoutEditarTopicoBinding editarTopicoBinding, int currentPosition) {
+        conteudoModel.setTitulo(editarTopicoBinding.edtTitulo.getText().toString());
+        conteudoModel.setInfo(editarTopicoBinding.edtTextoConteudo.getText().toString());
+
+        this.notifyDataSetChanged();
+        r.getLayoutManager().scrollToPosition(currentPosition);
+
+        dialogEdt.dismiss();
     }
 
     @Override
@@ -86,12 +107,13 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView titulo, info;
         Button remover_conteudo, editar_conteudo_t;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            titulo  = itemView.findViewById(R.id.text_conteudo_titulo);
-            info  = itemView.findViewById(R.id.text_conteudo_info);
-            remover_conteudo  = itemView.findViewById(R.id.remover_conteudo);
-            editar_conteudo_t  = itemView.findViewById(R.id.editar_conteudo_t);
+            titulo = itemView.findViewById(R.id.text_conteudo_titulo);
+            info = itemView.findViewById(R.id.text_conteudo_info);
+            remover_conteudo = itemView.findViewById(R.id.remover_conteudo);
+            editar_conteudo_t = itemView.findViewById(R.id.editar_conteudo_t);
         }
     }
 }

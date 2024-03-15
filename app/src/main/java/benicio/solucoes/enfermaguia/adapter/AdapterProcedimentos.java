@@ -1,6 +1,7 @@
 package benicio.solucoes.enfermaguia.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,7 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ProcedimentoModel procedimentoModel = lista.get(position);
 
+
         if (!isAdmin) {
             holder.editarProcediemento.setVisibility(View.GONE);
             holder.excluirProcediemento.setVisibility(View.GONE);
@@ -60,10 +62,18 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
         });
 
         holder.excluirProcediemento.setOnClickListener(view -> {
-            refProcedimentos.child(procedimentoModel.getId()).setValue(null).addOnCompleteListener(task ->
-                    Toast.makeText(a, "Excluído com Sucesso!", Toast.LENGTH_SHORT).show());
+            AlertDialog.Builder b = new AlertDialog.Builder(a);
+            b.setTitle("Aviso!");
+            b.setMessage("Deseja realmente realizar a operação de remoção do procedimento?");
+            b.setNegativeButton("Não", null);
+            b.setPositiveButton("Sim", (d, i ) ->{
+                refProcedimentos.child(procedimentoModel.getId()).setValue(null).addOnCompleteListener(task ->
+                        Toast.makeText(a, "Excluído com Sucesso!", Toast.LENGTH_SHORT).show());
+            });
+            b.create().show();
         });
 
+        procedimentoModel.setChecado(false);
         holder.checkBoxMarcarCompartilhar.setChecked(false);
 
         holder.checkBoxMarcarCompartilhar.setOnClickListener(view ->

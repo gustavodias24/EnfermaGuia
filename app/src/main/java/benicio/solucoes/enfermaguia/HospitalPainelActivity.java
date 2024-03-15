@@ -55,8 +55,11 @@ public class HospitalPainelActivity extends AppCompatActivity {
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         editor = prefs.edit();
 
+        getSupportActionBar().setTitle(prefs.getString("nomeUser", ""));
+
+        mainBinding.textView.setText("Painel de Procedimentos do Hospital " + prefs.getString("nomeUser", ""));
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        getSupportActionBar().setTitle("Painel Hospital");
 
         mainBinding.criarProcecimento.setOnClickListener(view -> startActivity(new Intent(this, CriarProcedimentoActivity.class)));
         mainBinding.verSugestoes.setOnClickListener(view -> startActivity(new Intent(this, VerSugestoesActivity.class)));
@@ -77,7 +80,7 @@ public class HospitalPainelActivity extends AppCompatActivity {
                 Toast.makeText(this, "Selecione pelo menos 1 procedimento!", Toast.LENGTH_SHORT).show();
             } else {
 //                HallActivity.gerarPdfOS(listaParaCompartilharProcedimento, this);
-                PDFGenerator.generateAndSharePDF(this, listaParaCompartilharProcedimento);
+                PDFGenerator.generateAndSharePDF(this, listaParaCompartilharProcedimento, "Procedimentos do Hospital " + prefs.getString("nomeUser", ""));
             }
         });
     }

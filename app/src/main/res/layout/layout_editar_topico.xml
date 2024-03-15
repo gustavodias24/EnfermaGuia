@@ -1,28 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textView8"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edite"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+    <TextView
+        android:id="@+id/textEditando"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edite X"
         android:textColor="#000000"
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/edtTextoConteudo"
+    <Button
+        android:id="@+id/pronto2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Texto"
-        android:inputType="textMultiLine" />
+        android:backgroundTint="#4CAF50"
+        android:text="PRONTO"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Título" />
+
+        <EditText
+            android:id="@+id/edtTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Título"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Conteúdo" />
+
+        <EditText
+            android:id="@+id/edtTextoConteudo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Conteúdo"
+            android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/pronto"
@@ -34,4 +72,5 @@
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
