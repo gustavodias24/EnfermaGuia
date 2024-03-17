@@ -9,7 +9,7 @@ Projeto FreeLancer para um trabalho de um curso de Doutorado de Enfermagem, da u
 1. [Funcionalides](#sobre-o-projeto)
     - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 2. [Instalação](#instalação)
-3. [Imagens](#imagens)
+3. [Exibição](#exibição)
 4. [Contato](#contato)
 
 ## Sobre o Projeto
@@ -30,16 +30,20 @@ Muito mais....
 
 ## Instalação
 
-Instruções passo a passo sobre como instalar e configurar o projeto localmente. Se necessário, inclua requisitos de sistema e dependências.
+Por enquanto você precisa abaixar o projeto e compilar o seu próprio Apk!.
 
-## Imagens
+## Exibição
 
-![Logo](https://github.com/gustavodias24/EnfermaGuia/blob/18a59c633549103a80590a59672324eec7455aa5/app/src/main/res/drawable/iconeapp.png)
-![Logo](https://github.com/gustavodias24/EnfermaGuia/blob/18a59c633549103a80590a59672324eec7455aa5/app/src/main/res/drawable/iconeapp.png)
-![Logo](https://github.com/gustavodias24/EnfermaGuia/blob/18a59c633549103a80590a59672324eec7455aa5/app/src/main/res/drawable/iconeapp.png)
+![image](app/src/main/res/raw/tela_de_login.png)
+![image]()
+![image]()
+![image]()
+![image]()
+![image]()
+![image]()
 
 
 ## Contato
 
-Gustavo Benicio - gustavo024dias@gmail.com | 91 9 80101707
+Gustavo Benicio - gustavo024dias@gmail.com | 91 9 8010-1707
 
