@@ -34,13 +34,13 @@ Por enquanto você precisa abaixar o projeto e compilar o seu próprio Apk!.
 
 ## Exibição
 
-![image](app/src/main/res/raw/tela_de_login.png)
-![image]()
-![image]()
-![image]()
-![image]()
-![image]()
-![image]()
+![image](https://github.com/gustavodias24/EnfermaGuia/blob/c9abb553719ea13e9ead1f5f33a3cc6863f36c24/app/src/main/res/raw/tela_de_login.png)
+![image](https://github.com/gustavodias24/EnfermaGuia/blob/c9abb553719ea13e9ead1f5f33a3cc6863f36c24/app/src/main/res/raw/tele_do_usuario.png)
+![image](https://github.com/gustavodias24/EnfermaGuia/blob/c9abb553719ea13e9ead1f5f33a3cc6863f36c24/app/src/main/res/raw/visualizando_procedimento.png)
+![image](https://github.com/gustavodias24/EnfermaGuia/blob/c9abb553719ea13e9ead1f5f33a3cc6863f36c24/app/src/main/res/raw/adicionar_sugestao.png)
+![image](https://github.com/gustavodias24/EnfermaGuia/blob/c9abb553719ea13e9ead1f5f33a3cc6863f36c24/app/src/main/res/raw/gerando_pdf_compartilhavel.png)
+![image](https://github.com/gustavodias24/EnfermaGuia/blob/c9abb553719ea13e9ead1f5f33a3cc6863f36c24/app/src/main/res/raw/tela_adm_hospital.png)
+![image](https://github.com/gustavodias24/EnfermaGuia/blob/c9abb553719ea13e9ead1f5f33a3cc6863f36c24/app/src/main/res/raw/tela_criacao_procedimento.png)
 
 
 ## Contato
