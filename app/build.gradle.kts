@@ -38,6 +38,7 @@ android {
 
 dependencies {
 
+    implementation("com.oguzdev:CircularFloatingActionMenu:1.0.2")
     implementation("com.itextpdf:itext7-core:7.1.15")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

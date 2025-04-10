@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/azul_claro"
+        android:background="@color/white"
         android:orientation="vertical"
         android:padding="8dp"
         tools:context=".AdminActivity">
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Escolha uma Opção"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="24sp"
             android:textStyle="bold" />
 

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/azul_claro"
+        android:background="@color/white"
         android:orientation="vertical"
         android:padding="8dp"
         tools:context=".CadastroUsuarioActivity">
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Realize o Cadastro"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="34sp"
             android:textStyle="bold" />
 
@@ -34,16 +34,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Login"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF">
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,16 +54,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Nome Completo"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF">
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,15 +74,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Senha"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF">
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

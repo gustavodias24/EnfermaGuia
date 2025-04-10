@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/azul_claro"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp"
@@ -27,7 +27,7 @@
             android:gravity="center|center_horizontal"
             android:text="EnfermaGuia"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="34sp"
             android:textStyle="bold" />
 
@@ -38,16 +38,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Login"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF">
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,18 +58,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Senha"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF"
+            android:textColorHint="#000000"
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="#FFFFFF">
+            app:passwordToggleTint="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:password="true"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Criar uma nova conta."
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textColorHint="#FFFFFF"
             android:textStyle="bold" />
 

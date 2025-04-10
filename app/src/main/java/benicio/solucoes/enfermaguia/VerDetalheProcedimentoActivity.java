@@ -3,19 +3,23 @@ package benicio.solucoes.enfermaguia;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +63,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        getSupportActionBar().setTitle("Visualização");
+        getSupportActionBar().setTitle("Voltar");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -100,62 +104,13 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
                     mainBinding.textTituloProcedimento.setText(procedimentoModel.getNomeProcedimento());
 
+                    String titulo = "";
                     for (InfoProcedimento info : procedimentoModel.getListaInformacao()) {
                         if (info.getTipo() == 0) {
-                            TextView textTitle = new TextView(this);
-
-                            textTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                textTitle.setId(View.generateViewId());
-                                idTitulo = textTitle.getId(); // Armazena o ID gerado na variável global
-                            } else {
-                                textTitle.setId(Utils.generateViewId()); // Você precisará implementar esse método em uma classe Utils
-                                idTitulo = textTitle.getId(); // Armazena o ID gerado na variável global
-                            }
-
-                            textTitle.setPadding(16, 32, 16, 0); // left, top, right, bottom
-                            textTitle.setText(info.getInfo());
-                            textTitle.setTextColor(getResources().getColor(R.color.azul_fote));
-                            textTitle.setTextSize(48);
-                            textTitle.setTypeface(null, Typeface.BOLD);
-                            mainBinding.layout.addView(textTitle);
+                              titulo = info.getInfo();
                         } else {
-                            TextView textDescri = new TextView(this);
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                textDescri.setId(View.generateViewId());
-                                idBody = textDescri.getId(); // Armazena o ID gerado na variável global
-                            } else {
-                                textDescri.setId(Utils.generateViewId()); // Você precisará implementar esse método em uma classe Utils
-                                idBody = textDescri.getId(); // Armazena o ID gerado na variável global
-                            }
-
-                            textDescri.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                            textDescri.setPadding(16, 0, 16, 0); // left, top, right, bottom
-                            textDescri.setVisibility(View.GONE);
-                            textDescri.setText(info.getInfo());
-                            textDescri.setTextSize(28);
-                            textDescri.setTypeface(null, Typeface.BOLD);
-                            mainBinding.layout.addView(textDescri);
-
-                            View view = new View(this);
-                            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2)); // Define a altura da linha
-                            view.setBackgroundColor(getResources().getColor(R.color.black)); // Define a cor da linha
-
-                            mainBinding.layout.addView(view);
-
-                            TextView textoTitulo = findViewById(idTitulo);
-                            TextView textoDes = findViewById(idBody);
-
-                            textoTitulo.setOnClickListener(viewCrypted -> {
-                                if (textoDes.getVisibility() == View.VISIBLE) {
-                                    textDescri.setVisibility(View.GONE);
-                                } else {
-                                    textDescri.setVisibility(View.VISIBLE);
-                                }
-                            });
-
+                            String descricao = info.getInfo();
+                            adicionarItemDinamico(titulo, descricao,  mainBinding.layout , this);
                         }
                     }
 
@@ -215,7 +170,6 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     private void pegarNomeUsuario() {
         DatabaseReference refUsuarios = FirebaseDatabase.getInstance().getReference().child("usuarios");
         refUsuarios.child(prefs.getString("id", "")).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -231,4 +185,84 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void adicionarItemDinamico(String titulo, String descricao, LinearLayout container, Context context) {
+        // Layout principal (vertical)
+        LinearLayout layoutPrincipal = new LinearLayout(context);
+        layoutPrincipal.setOrientation(LinearLayout.VERTICAL);
+//
+        // Criar LayoutParams e adicionar margem
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, 0, 0, 16);
+        layoutPrincipal.setLayoutParams(params);
+        layoutPrincipal.setPadding(8, 16, 16, 8);
+
+        layoutPrincipal.setBackground(ContextCompat.getDrawable(context, R.drawable.back_redondo)); // seu drawable
+
+        // Layout horizontal com imagem e título
+        LinearLayout layoutHorizontal = new LinearLayout(context);
+        layoutHorizontal.setOrientation(LinearLayout.HORIZONTAL);
+        layoutHorizontal.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+
+        // ImageView
+        ImageView imageView = new ImageView(context);
+        imageView.setImageResource(android.R.drawable.ic_input_add);
+        imageView.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+
+        // Título (TextView)
+        TextView tituloTextView = new TextView(context);
+        tituloTextView.setText(titulo);
+        tituloTextView.setGravity(Gravity.CENTER);
+        tituloTextView.setTextColor(ContextCompat.getColor(context, R.color.azul_medio));
+        tituloTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+        ));
+
+        // Descrição (TextView)
+        TextView descricaoTextView = new TextView(context);
+        descricaoTextView.setText(descricao);
+        descricaoTextView.setGravity(Gravity.CENTER);
+        descricaoTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+        descricaoTextView.setVisibility(View.GONE);
+        descricaoTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+
+        // Clique no título
+        imageView.setOnClickListener(v -> {
+            if (descricaoTextView.getVisibility() == View.GONE) {
+                descricaoTextView.setAlpha(0f);
+                descricaoTextView.setVisibility(View.VISIBLE);
+                descricaoTextView.animate().alpha(1f).setDuration(300).start();
+            } else {
+                descricaoTextView.animate().alpha(0f).setDuration(300).withEndAction(() -> {
+                    descricaoTextView.setVisibility(View.GONE);
+                }).start();
+            }
+        });
+
+        // Montar a hierarquia
+        layoutHorizontal.addView(imageView);
+        layoutHorizontal.addView(tituloTextView);
+
+        layoutPrincipal.addView(layoutHorizontal);
+        layoutPrincipal.addView(descricaoTextView);
+
+        // Adicionar ao container principal da sua Activity/Fragment
+        container.addView(layoutPrincipal);
+    }
+
 }

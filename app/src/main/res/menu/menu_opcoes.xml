@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_criar_procedimento"
+        android:icon="@drawable/criarprocedimento"
+        android:title="Criar procedimento" />
+    <item
+        android:id="@+id/menu_sugestoes"
+        android:icon="@drawable/sugestoes"
+        android:title="Sugestões de usuários" />
+    <item
+        android:id="@+id/menu_metricas"
+        android:icon="@drawable/metricas"
+        android:title="Métricas" />
+    <item
+        android:id="@+id/menu_ajuda"
+        android:title="Ajuda"
+        android:icon="@drawable/baseline_help_outline_24"
+        />
+
+    <item
+        android:id="@+id/menu_creditos"
+        android:title="Créditos"
+        android:icon="@drawable/baseline_info_24"
+        />
+
+    <item
+        android:id="@+id/menu_sair"
+        android:title="Sair"
+        android:icon="@drawable/baseline_exit_to_app_24"
+        />
+</menu>

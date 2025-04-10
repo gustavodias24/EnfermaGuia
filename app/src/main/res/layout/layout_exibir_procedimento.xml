@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/back_redondo"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -40,11 +41,11 @@
 
         <ImageButton
             android:id="@+id/btn_ir_ver_procedimento"
-            android:layout_width="60sp"
-            android:layout_height="60sp"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:backgroundTint="#00FFFFFF"
-            android:scaleType="fitStart"
-            android:src="@drawable/seta"
+            android:scaleType="centerInside"
+            android:src="@drawable/lupa"
             android:tint="@color/azul_fote" />
     </LinearLayout>
 
