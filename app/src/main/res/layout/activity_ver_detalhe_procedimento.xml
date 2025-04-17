@@ -27,6 +27,19 @@
             app:iconGravity="textStart" />
 
         <TextView
+            android:id="@+id/textTituloHospital"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="loading..."
+            android:textAllCaps="true"
+            android:textColor="@color/azul_fote"
+            android:textColorHint="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/textTituloProcedimento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,13 +52,32 @@
             android:textSize="34sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView9"
+        <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Clique em + e saiba mais"
-            android:textAlignment="center"
-            android:textColor="#000000" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clique em "
+                android:textAlignment="center"
+                android:textColor="#000000" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_input_add" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="e saiba mais"
+                android:textAlignment="center"
+                android:textColor="#000000" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/compartilhar"

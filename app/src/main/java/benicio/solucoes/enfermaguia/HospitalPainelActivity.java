@@ -35,15 +35,10 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 
-import benicio.solucoes.enfermaguia.adapter.AdapterConteudo;
 import benicio.solucoes.enfermaguia.adapter.AdapterProcedimentos;
 import benicio.solucoes.enfermaguia.databinding.ActivityHospitalPainelBinding;
-import benicio.solucoes.enfermaguia.model.ConteudoModel;
-import benicio.solucoes.enfermaguia.model.InfoProcedimento;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 import benicio.solucoes.enfermaguia.utils.PDFGenerator;
 
@@ -142,37 +137,80 @@ public class HospitalPainelActivity extends AppCompatActivity {
                 .setContentView(icon)
                 .build();
 
+
+        // CircularFloatingActionMenu
+
+        int buttonSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
+        int iconSize = getResources().getDimensionPixelSize(R.dimen.sub_action_icon_size);
+
+// LayoutParams do botão
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(buttonSize, buttonSize);
+
+// Builder do SubActionButton com layout do botão principal
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        itemBuilder.setLayoutParams(params);
 
-        // repeat many times:
+// -----------------------------
+// Botão Criar Procedimento
+        FrameLayout iconContainer1 = new FrameLayout(this);
+        iconContainer1.setLayoutParams(params);
 
-        int tamanho = 120;
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(tamanho, tamanho);
+        ImageView itemIcon1 = new ImageView(this);
+        itemIcon1.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.criarprocedimento));
 
-        ImageView itemIcon = new ImageView(this);
-        itemIcon.setImageDrawable( ContextCompat.getDrawable(getApplicationContext(), R.drawable.criarprocedimento) );
-        SubActionButton buttonCriarProcedimento = itemBuilder.setContentView(itemIcon).build();
-        buttonCriarProcedimento.setLayoutParams(params);
-        buttonCriarProcedimento.setOnClickListener( v -> startActivity(new Intent(this, CriarProcedimentoActivity.class)));
+        FrameLayout.LayoutParams iconParams1 = new FrameLayout.LayoutParams(iconSize, iconSize);
+        iconParams1.gravity = Gravity.CENTER;
+        itemIcon1.setLayoutParams(iconParams1);
+
+        iconContainer1.addView(itemIcon1);
+
+        SubActionButton buttonCriarProcedimento = itemBuilder.setContentView(iconContainer1).build();
+        buttonCriarProcedimento.setOnClickListener(v -> startActivity(new Intent(this, CriarProcedimentoActivity.class)));
+
+// -----------------------------
+// Botão Ver Sugestões
+        FrameLayout iconContainer2 = new FrameLayout(this);
+        iconContainer2.setLayoutParams(params);
 
         ImageView itemIcon2 = new ImageView(this);
-        itemIcon2.setImageDrawable( ContextCompat.getDrawable(getApplicationContext(), R.drawable.sugestoes) );
-        SubActionButton buttonCriarSugestoes = itemBuilder.setContentView(itemIcon2).build();
-        buttonCriarSugestoes.setLayoutParams(params);
-        buttonCriarSugestoes.setOnClickListener( v ->  startActivity(new Intent(this, VerSugestoesActivity.class)));
+        itemIcon2.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.sugestoes));
+
+        FrameLayout.LayoutParams iconParams2 = new FrameLayout.LayoutParams(iconSize, iconSize);
+        iconParams2.gravity = Gravity.CENTER;
+        itemIcon2.setLayoutParams(iconParams2);
+
+        iconContainer2.addView(itemIcon2);
+
+        SubActionButton buttonCriarSugestoes = itemBuilder.setContentView(iconContainer2).build();
+        buttonCriarSugestoes.setOnClickListener(v -> startActivity(new Intent(this, VerSugestoesActivity.class)));
+
+// -----------------------------
+// Botão Métricas
+        FrameLayout iconContainer3 = new FrameLayout(this);
+        iconContainer3.setLayoutParams(params);
 
         ImageView itemIcon3 = new ImageView(this);
-        itemIcon3.setImageDrawable( ContextCompat.getDrawable(getApplicationContext(), R.drawable.metricas) );
-        SubActionButton buttonMetricas = itemBuilder.setContentView(itemIcon3).build();
-        buttonMetricas.setLayoutParams(params);
-        buttonMetricas.setOnClickListener( v ->  startActivity(new Intent(this, MetricasA.class)));
+        itemIcon3.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.metricas));
 
+        FrameLayout.LayoutParams iconParams3 = new FrameLayout.LayoutParams(iconSize, iconSize);
+        iconParams3.gravity = Gravity.CENTER;
+        itemIcon3.setLayoutParams(iconParams3);
+
+        iconContainer3.addView(itemIcon3);
+
+        SubActionButton buttonMetricas = itemBuilder.setContentView(iconContainer3).build();
+        buttonMetricas.setOnClickListener(v -> startActivity(new Intent(this, MetricasA.class)));
+
+// -----------------------------
+// Criar o menu circular
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(buttonCriarProcedimento)
                 .addSubActionView(buttonCriarSugestoes)
                 .addSubActionView(buttonMetricas)
-                .attachTo(actionButton)
+                .attachTo(actionButton) // seu botão principal
                 .build();
+
+
 
     }
 

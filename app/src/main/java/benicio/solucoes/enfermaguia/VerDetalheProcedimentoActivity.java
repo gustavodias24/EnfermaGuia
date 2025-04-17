@@ -52,6 +52,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
     private ActivityVerDetalheProcedimentoBinding mainBinding;
     private DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
     private DatabaseReference refSugestoes = FirebaseDatabase.getInstance().getReference().child("sugestoes");
+    private DatabaseReference refUsuarios = FirebaseDatabase.getInstance().getReference().child("usuarios");
     private Bundle b;
     private ProcedimentoModel procedimentoModel;
     private Dialog dialogSugestao;
@@ -67,7 +68,6 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
 
         mainBinding.darSugestao.setOnClickListener(view -> dialogSugestao.show());
@@ -76,6 +76,15 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
         b = getIntent().getExtras();
 
+        assert b != null;
+        String idHospital = b.getString("idHospital", "");
+        refUsuarios.child(idHospital).get().addOnCompleteListener( task -> {
+            if ( task.isSuccessful() ){
+                UsuarioModel hospital = task.getResult().getValue(UsuarioModel.class);
+                assert hospital != null;
+                mainBinding.textTituloHospital.setText(hospital.getNome());
+            }
+        });
 
         assert b != null;
         String idProcedimento = b.getString("idProcedimento", "");

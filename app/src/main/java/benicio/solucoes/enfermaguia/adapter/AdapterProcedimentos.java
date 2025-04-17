@@ -90,6 +90,7 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
                     Intent i = new Intent(a, VerDetalheProcedimentoActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     i.putExtra("idProcedimento", procedimentoModel.getId());
+                    i.putExtra("idHospital", procedimentoModel.getIdHospital());
                     a.startActivity(i);
                 } else {
                     Toast.makeText(a, "Tente novamente!", Toast.LENGTH_SHORT).show();

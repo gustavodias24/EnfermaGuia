@@ -75,6 +75,7 @@
                     android:layout_marginTop="8dp" />
             </LinearLayout>
         </ScrollView>
+
     </LinearLayout>
 
     <!-- MENU LATERAL -->
@@ -86,5 +87,7 @@
         android:background="@android:color/white"
         android:fitsSystemWindows="true"
         app:menu="@menu/menu_opcoes" />
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
