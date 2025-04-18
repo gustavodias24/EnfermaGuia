@@ -135,7 +135,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
         LayoutCriarSugestaoBinding criarSugestaoBinding = LayoutCriarSugestaoBinding.inflate(getLayoutInflater());
 
         criarSugestaoBinding.cadastro.setOnClickListener(view -> {
-            String sugestaoString = criarSugestaoBinding.sugestaoField.getEditText().getText().toString();
+            String sugestaoString = criarSugestaoBinding.sugestaoField.getText().toString();
             if (sugestaoString.isEmpty()) {
                 Toast.makeText(this, "Sugestão não pode ser vazia!", Toast.LENGTH_SHORT).show();
             } else {
@@ -150,6 +150,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                 sugestaoModel.setNomeProcedimento(procedimentoModel.getNomeProcedimento());
                 sugestaoModel.setInfo(sugestaoString);
                 sugestaoModel.setNomeUsuario(nomeUsuario);
+                sugestaoModel.setIdUsuario(prefs.getString("id", ""));
 
                 refSugestoes.child(sugestaoModel.getId()).setValue(sugestaoModel).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -157,7 +158,7 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
                         refProcedimentos.child(procedimentoModel.getId()).setValue(procedimentoModel).addOnCompleteListener(task1 -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(this, "Sugestão Enviada com Sucesso!", Toast.LENGTH_SHORT).show();
-                                criarSugestaoBinding.sugestaoField.getEditText().setText("");
+                                criarSugestaoBinding.sugestaoField.setText("");
                                 dialogSugestao.dismiss();
                             } else {
                                 Toast.makeText(this, "Tente Novamente...", Toast.LENGTH_SHORT).show();

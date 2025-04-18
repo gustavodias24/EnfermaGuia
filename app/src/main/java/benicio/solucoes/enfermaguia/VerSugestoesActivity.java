@@ -1,6 +1,7 @@
 package benicio.solucoes.enfermaguia;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -11,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,6 +54,24 @@ public class VerSugestoesActivity extends AppCompatActivity {
         configurarRecyclerSugestoes();
 
 
+        mainBinding.removerSelecionados.setOnClickListener(v -> {
+            AlertDialog.Builder d = new AlertDialog.Builder(this);
+            d.setTitle("Atenção");
+            d.setMessage("Você tem certeza que deseja remover as sugestões selecionadas?");
+            d.setNegativeButton("Não", null);
+            d.setPositiveButton("Sim", (dialogInterface, i) -> {
+                for (SugestaoModel sugestaoModel : listaSugestao) {
+                    if (sugestaoModel.isSelecionadoDeletar()) {
+                        refSugestoes.child(sugestaoModel.getId()).removeValue();
+                    }
+                }
+
+                Toast.makeText(this, "Todos os Selecionados Foram Removidos!", Toast.LENGTH_SHORT).show();
+            });
+            d.create().show();
+        });
+
+
     }
 
     private void configurarRecyclerSugestoes() {
@@ -72,7 +92,7 @@ public class VerSugestoesActivity extends AppCompatActivity {
 
                     for (DataSnapshot dado : snapshot.getChildren()) {
                         SugestaoModel sugestao = dado.getValue(SugestaoModel.class);
-                        if ( sugestao.getIdHospital() != null && sugestao.getIdHospital().equals(prefs.getString("id", " "))){
+                        if (sugestao.getIdHospital() != null && sugestao.getIdHospital().equals(prefs.getString("id", " "))) {
                             listaSugestao.add(sugestao);
                         }
                     }

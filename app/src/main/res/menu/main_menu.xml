@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/go_to_feedbacks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/email_icon_white"
+        android:title="go_to_feedbacks"
+        android:iconTint="@color/white"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/sair_conta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="sair" />
+        android:icon="@drawable/sair_icon_white"
+        android:title="sair"
+        android:iconTint="@color/white"
+        app:showAsAction="always" />
 </menu>

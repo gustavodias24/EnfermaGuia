@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!login.isEmpty() && !senha.isEmpty()) {
 
-                    if (login.equals("adm-master") && senha.equals("M4st3r@Adm")) {
+                    if (login.equals("adm") && senha.equals("adm")) {
                         startActivity(new Intent(this, AdminActivity.class));
                     } else {
                         refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {

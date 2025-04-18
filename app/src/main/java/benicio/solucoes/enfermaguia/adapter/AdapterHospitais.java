@@ -3,6 +3,7 @@ package benicio.solucoes.enfermaguia.adapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,23 +57,26 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
         if ( isSelecao ){
             holder.rmButton.setVisibility(View.GONE);
             holder.infos.setText(hospital.getNome());
+
             holder.itemView.getRootView().setOnClickListener(view -> {
                 editor.putString("idHospitalSelecionado", hospital.getId()).apply();
-                HallActivity.dialogSelecionaHospital.dismiss();
+                //HallActivity.dialogSelecionaHospital.dismiss();
                 Toast.makeText(c, "Hospital " + hospital.getNome() + " Selecionado", Toast.LENGTH_SHORT).show();
                 HallActivity.setNomeHospitalAtual();
                 HallActivity.buscarProcedimentos();
+                HallActivity.recyclerHospital.setVisibility(View.GONE);
+                HallActivity.btnCompartilhar.setVisibility(View.VISIBLE);
+                HallActivity.avisoSelecionarHospital.setVisibility(View.GONE);
+                HallActivity.nomeHospitalTEXT.setText(Html.fromHtml("Procedimentos do Hospital <b>" + hospital.getNome() + "</b>"));
             });
         }else{
+
             holder.infos.setText(hospital.toString());
             holder.rmButton.setOnClickListener( view -> {
                 refUsuarios.child(hospital.getId()).setValue(null);
                 Toast.makeText(c, "Removido!", Toast.LENGTH_SHORT).show();
             });
         }
-
-        
-        
     }
 
     @Override

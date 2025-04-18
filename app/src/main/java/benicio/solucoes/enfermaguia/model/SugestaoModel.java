@@ -1,13 +1,16 @@
 package benicio.solucoes.enfermaguia.model;
 
 public class SugestaoModel {
-    String dataSugestao, info, nomeUsuario, id, nomeProcedimento, idProcedimento, idHospital;
+    String dataSugestao, info, nomeUsuario, id, nomeProcedimento, idProcedimento, idHospital, IdUsuario;
+
+    boolean selecionadoDeletar = false;
 
     @Override
     public String toString() {
-        return  "Usuário: " + nomeUsuario + " Data: " + dataSugestao + "\n" +
-                "Procedimento: " + nomeProcedimento + "\n" +
-                "Sugestão: " + info ;
+        return  "<b>Usuário: </b><br>" + nomeUsuario +
+                "<br><b>Data: </b>" + dataSugestao +
+                "<br><b>Procedimento: </b><br>" + nomeProcedimento +
+                "<br><b>Sugestão: </b><br>" + info ;
     }
 
     public SugestaoModel() {
@@ -50,6 +53,14 @@ public class SugestaoModel {
         return info;
     }
 
+    public String getIdUsuario() {
+        return IdUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        IdUsuario = idUsuario;
+    }
+
     public void setInfo(String info) {
         this.info = info;
     }
@@ -72,6 +83,14 @@ public class SugestaoModel {
 
     public String getNomeProcedimento() {
         return nomeProcedimento;
+    }
+
+    public boolean isSelecionadoDeletar() {
+        return selecionadoDeletar;
+    }
+
+    public void setSelecionadoDeletar(boolean selecionadoDeletar) {
+        this.selecionadoDeletar = selecionadoDeletar;
     }
 
     public void setNomeProcedimento(String nomeProcedimento) {

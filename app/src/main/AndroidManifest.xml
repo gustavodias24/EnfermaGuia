@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EnfermaGuia"
         tools:targetApi="31">
-
+        <activity
+            android:name=".FeedBacksActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -30,8 +31,7 @@
         <activity
             android:name=".CriarProcedimentoActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            />
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".adapter.AdapterMetricas"
             android:exported="false" />
@@ -58,7 +58,7 @@
         <activity
             android:name=".HallActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CadastroUsuarioActivity"
             android:exported="false"

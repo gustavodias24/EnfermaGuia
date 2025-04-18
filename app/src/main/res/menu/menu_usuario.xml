@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/buscar_procedimentos"
+        android:icon="@drawable/lupa_simples"
+        android:title="Buscar Procedimentos " />
+    <item
+        android:id="@+id/selecionar_hospital"
+        android:icon="@drawable/troca_icon"
+        android:title="Selecionar Outro Hospital" />
+    <item
+        android:id="@+id/sugerir_pop"
+        android:icon="@drawable/sugestoes"
+        android:title="Sugerir um novo POP" />
+    <item
+        android:id="@+id/menu_ajuda_usuario"
+        android:title="Ajuda"
+        android:icon="@drawable/baseline_help_outline_24"
+        />
+
+    <item
+        android:id="@+id/menu_creditos_usuario"
+        android:title="Créditos"
+        android:icon="@drawable/baseline_info_24"
+        />
+
+    <item
+        android:id="@+id/menu_sair_usuario"
+        android:title="Sair"
+        android:icon="@drawable/baseline_exit_to_app_24"
+        />
+</menu>
