@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,12 @@ public class AdapterSugestao extends RecyclerView.Adapter<AdapterSugestao.MyView
         holder.sugestaoInfo.setText(Html.fromHtml(listaSugestao.get(position).toString()));
 
         holder.selecionarDeletar.setOnClickListener(v -> {
+            Log.d("mayara", "Posicao: " + position + " " + holder.selecionarDeletar.isChecked());
+
             listaSugestao.get(position).setSelecionadoDeletar(
                     holder.selecionarDeletar.isChecked()
             );
+
         });
 
         holder.enviarFeedbackUsuario.setOnClickListener(v -> {
@@ -95,6 +99,9 @@ public class AdapterSugestao extends RecyclerView.Adapter<AdapterSugestao.MyView
             dialogFeedback = b.create();
             dialogFeedback.show();
         });
+
+        holder.selecionarDeletar.setChecked(listaSugestao.get(position).isSelecionadoDeletar());
+
     }
 
     @Override

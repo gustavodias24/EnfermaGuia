@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
@@ -28,6 +30,7 @@ import benicio.solucoes.enfermaguia.adapter.AdapterFeedbacks;
 import benicio.solucoes.enfermaguia.databinding.ActivityFeedBacksBinding;
 import benicio.solucoes.enfermaguia.databinding.ActivityHallBinding;
 import benicio.solucoes.enfermaguia.model.FeedbackModel;
+import benicio.solucoes.enfermaguia.model.SugestaoModel;
 
 public class FeedBacksActivity extends AppCompatActivity {
 
@@ -63,8 +66,12 @@ public class FeedBacksActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot dado : snapshot.getChildren()) {
                         FeedbackModel feedbackModel = dado.getValue(FeedbackModel.class);
-                        if (feedbackModel.getIdUsuario().equals(prefs.getString("id", ""))) {
-                            ListFeedbackUser.add(feedbackModel);
+                        try {
+                            if (feedbackModel != null && feedbackModel.getIdUsuario().equals(prefs.getString("id", ""))) {
+                                ListFeedbackUser.add(feedbackModel);
+                            }
+                        } catch (Exception ignored) {
+
                         }
                     }
                     mainBinding.textCarregando.setVisibility(View.GONE);
@@ -76,6 +83,24 @@ public class FeedBacksActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+
+
+        mainBinding.removerSelecionados.setOnClickListener(v -> {
+            AlertDialog.Builder d = new AlertDialog.Builder(this);
+            d.setTitle("Atenção");
+            d.setMessage("Você tem certeza que deseja remover os Feedbacks selecionados?");
+            d.setNegativeButton("Não", null);
+            d.setPositiveButton("Sim", (dialogInterface, i) -> {
+                for (FeedbackModel feedbackModel : ListFeedbackUser) {
+                    if (feedbackModel.isSelecionadoDeletar()) {
+                        refFeedbacks.child(feedbackModel.getId()).removeValue();
+                    }
+                }
+
+                Toast.makeText(this, "Todos os Selecionados Foram Removidos!", Toast.LENGTH_SHORT).show();
+            });
+            d.create().show();
         });
     }
 }

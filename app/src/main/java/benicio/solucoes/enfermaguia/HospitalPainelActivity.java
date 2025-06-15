@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -64,6 +65,8 @@ public class HospitalPainelActivity extends AppCompatActivity {
         mainBinding = ActivityHospitalPainelBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         toolbar = findViewById(R.id.toolbar);
@@ -89,9 +92,11 @@ public class HospitalPainelActivity extends AppCompatActivity {
             }else if (item.getItemId() == R.id.menu_metricas){
                 startActivity(new Intent(this, MetricasA.class));
             }else if (item.getItemId() == R.id.menu_ajuda){
-
+                Intent i = new Intent(this, TutorialActivity.class);
+                i.putExtra("h", true);
+                startActivity(i);
             }else if (item.getItemId() == R.id.menu_creditos){
-
+                startActivity(new Intent(this, CreditosActivity.class));
             }else if (item.getItemId() == R.id.menu_sair){
                 finish();
                 editor.putString("id", "").apply();

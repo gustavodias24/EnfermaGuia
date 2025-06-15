@@ -54,7 +54,7 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         UsuarioModel hospital = lista.get(position);
-        if ( isSelecao ){
+        if (isSelecao) {
             holder.rmButton.setVisibility(View.GONE);
             holder.infos.setText(hospital.getNome());
 
@@ -63,16 +63,17 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
                 //HallActivity.dialogSelecionaHospital.dismiss();
                 Toast.makeText(c, "Hospital " + hospital.getNome() + " Selecionado", Toast.LENGTH_SHORT).show();
                 HallActivity.setNomeHospitalAtual();
-                HallActivity.buscarProcedimentos();
+                HallActivity.buscarProcedimentos(false, "");
                 HallActivity.recyclerHospital.setVisibility(View.GONE);
                 HallActivity.btnCompartilhar.setVisibility(View.VISIBLE);
                 HallActivity.avisoSelecionarHospital.setVisibility(View.GONE);
-                HallActivity.nomeHospitalTEXT.setText(Html.fromHtml("Procedimentos do Hospital <b>" + hospital.getNome() + "</b>"));
+                HallActivity.nomeHospitalTEXT.setText(Html.fromHtml("<b><h1>" + hospital.getNome() + "</h1></b>" + "<br>Procedimentos Operacionais Padrão."));
+                HallActivity.layoutProcedimentos.setVisibility(View.VISIBLE);
             });
-        }else{
+        } else {
 
             holder.infos.setText(hospital.toString());
-            holder.rmButton.setOnClickListener( view -> {
+            holder.rmButton.setOnClickListener(view -> {
                 refUsuarios.child(hospital.getId()).setValue(null);
                 Toast.makeText(c, "Removido!", Toast.LENGTH_SHORT).show();
             });
@@ -87,11 +88,12 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView infos;
         Button rmButton;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             infos = itemView.findViewById(R.id.dados_user_hospital);
             rmButton = itemView.findViewById(R.id.remover_user_hospital);
-            
+
         }
     }
 }

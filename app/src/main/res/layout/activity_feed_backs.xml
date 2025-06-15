@@ -25,6 +25,17 @@
             android:textColor="#000000"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/remover_selecionados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#FF1111"
+            android:text="Remover Selecionados"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/textCarregando"
             android:layout_width="match_parent"

@@ -1,8 +1,12 @@
 package benicio.solucoes.enfermaguia.adapter;
 
+import static benicio.solucoes.enfermaguia.HallActivity.buscarProcedimentos;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import benicio.solucoes.enfermaguia.CriarProcedimentoActivity;
@@ -26,16 +34,18 @@ import benicio.solucoes.enfermaguia.VerDetalheProcedimentoActivity;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 
 public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimentos.MyViewHolder> {
+    private static final Logger log = LoggerFactory.getLogger(AdapterProcedimentos.class);
     public static DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
-    List<ProcedimentoModel> lista;
+    private List<ProcedimentoModel> itemList;
+
     Activity a;
 
     boolean isAdmin;
 
     public AdapterProcedimentos(List<ProcedimentoModel> lista, Activity a, boolean isAdmin) {
-        this.lista = lista;
         this.a = a;
         this.isAdmin = isAdmin;
+        this.itemList = lista;
     }
 
     @NonNull
@@ -46,7 +56,7 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        ProcedimentoModel procedimentoModel = lista.get(position);
+        ProcedimentoModel procedimentoModel = itemList.get(position);
 
 
         if (!isAdmin) {
@@ -66,7 +76,7 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
             b.setTitle("Aviso!");
             b.setMessage("Deseja realmente realizar a operação de remoção do procedimento?");
             b.setNegativeButton("Não", null);
-            b.setPositiveButton("Sim", (d, i ) ->{
+            b.setPositiveButton("Sim", (d, i) -> {
                 refProcedimentos.child(procedimentoModel.getId()).setValue(null).addOnCompleteListener(task ->
                         Toast.makeText(a, "Excluído com Sucesso!", Toast.LENGTH_SHORT).show());
             });
@@ -102,7 +112,7 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
 
     @Override
     public int getItemCount() {
-        return lista.size();
+        return itemList.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -121,5 +131,10 @@ public class AdapterProcedimentos extends RecyclerView.Adapter<AdapterProcedimen
             editarProcediemento = itemView.findViewById(R.id.editarProcediemento);
             excluirProcediemento = itemView.findViewById(R.id.excluirProcediemento);
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filter(String text) {
+        buscarProcedimentos(true, text);
     }
 }

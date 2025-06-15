@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/azul_claro"
     tools:context=".HallActivity">
 
@@ -52,36 +52,70 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSelecionarHospital"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
 
-                <Button
-                    android:id="@+id/compartilhar"
+                <LinearLayout
+                    android:id="@+id/layout_procedimentos"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#FFC107"
-                    android:text="Compartilhar Selecionados"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    app:icon="@drawable/share"
-                    app:iconGravity="textStart"
-                    app:iconSize="15dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Procedimentos do Hospital "
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                     />
+                    <Button
+                        android:id="@+id/compartilhar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#FFC107"
+                        android:text="Compartilhar Selecionados"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:icon="@drawable/share"
+                        app:iconGravity="textStart"
+                        app:iconSize="15dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerProcedimentos"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="Procedimentos do Hospital "
+                        android:textColor="#000000"
+                        android:textSize="21sp" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutPesquisar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/edtPesquisar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Digite aqui para pesquisar..."
+                            android:inputType="text" />
+
+                        <Button
+                            android:id="@+id/buttonPesquisar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/azul_fote"
+                            android:onClick="pesquisarProcedimento"
+                            android:text="Pesquisar"
+                            android:textColor="#FFFFFF" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerProcedimentos"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
 
                 <!-- MENU LATERAL -->
 

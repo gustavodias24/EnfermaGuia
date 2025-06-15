@@ -36,11 +36,19 @@ public class AdapterFeedbacks extends RecyclerView.Adapter<AdapterFeedbacks.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.enviarFeedbackUsuario.setVisibility(View.GONE);
-        holder.selecionarDeletar.setVisibility(View.GONE);
 
         holder.sugestaoInfo.setText(
                 Html.fromHtml(list.get(position).toString())
         );
+
+        holder.selecionarDeletar.setOnClickListener(v -> {
+            list.get(position).setSelecionadoDeletar(
+                    holder.selecionarDeletar.isChecked()
+            );
+        });
+
+        holder.selecionarDeletar.setChecked(list.get(position).isSelecionadoDeletar());
+
     }
 
     @Override

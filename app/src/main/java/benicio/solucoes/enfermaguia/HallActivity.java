@@ -31,7 +31,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +61,7 @@ import benicio.solucoes.enfermaguia.databinding.ActivityCadastroUsuarioBinding;
 import benicio.solucoes.enfermaguia.databinding.ActivityHallBinding;
 import benicio.solucoes.enfermaguia.databinding.LayoutCriarSugestaoBinding;
 import benicio.solucoes.enfermaguia.databinding.LayoutSelecionarHospitalBinding;
+import benicio.solucoes.enfermaguia.model.FeedbackModel;
 import benicio.solucoes.enfermaguia.model.InfoProcedimento;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 import benicio.solucoes.enfermaguia.model.SugestaoModel;
@@ -66,12 +69,15 @@ import benicio.solucoes.enfermaguia.model.UsuarioModel;
 import benicio.solucoes.enfermaguia.utils.PDFGenerator;
 
 public class HallActivity extends AppCompatActivity {
+    int newCountFeedbacks = 0;
 
+    MenuItem itemFeedbackMenu;
     private String nomeUsuario = "";
     public Dialog dialogSugestao;
     public static List<UsuarioModel> listaHospitais = new ArrayList<>();
     private ActivityHallBinding mainBinding;
 
+    private DatabaseReference refFeedbacks = FirebaseDatabase.getInstance().getReference().child("feedbacks");
     private DatabaseReference refSugestoes = FirebaseDatabase.getInstance().getReference().child("sugestoes");
     public static DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
     private DatabaseReference refUsuarios = FirebaseDatabase.getInstance().getReference().child("usuarios");
@@ -93,6 +99,7 @@ public class HallActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     public static TextView nomeHospitalTEXT;
+    public static LinearLayout layoutProcedimentos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +108,19 @@ public class HallActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         editor = prefs.edit();
+
+        editor.putString("idHospitalSelecionado", "").apply();
+
+        verificarNovosFeedbacks();
 
         pegarNomeUsuario();
 
         nomeHospitalTEXT = mainBinding.textView7;
+        layoutProcedimentos = mainBinding.layoutProcedimentos;
         drawerLayout = mainBinding.drawerLayout;
         navigationView = mainBinding.navigationView;
         toolbar = mainBinding.toolbar;
@@ -125,16 +139,35 @@ public class HallActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
 
             if (item.getItemId() == R.id.buscar_procedimentos) {
-
+                if(prefs.getString("idHospitalSelecionado", "").isEmpty()){
+                    AlertDialog.Builder b = new AlertDialog.Builder(this);
+                    b.setTitle("Atenção");
+                    b.setMessage("Selecione um hospital primeiro antes de querer pesquisar por procedimentos!");
+                    b.setPositiveButton("ok", null);
+                    b.create().show();
+                }else{
+                    mainBinding.layoutPesquisar.setVisibility(View.VISIBLE);
+                }
             } else if (item.getItemId() == R.id.selecionar_hospital) {
                 mainBinding.rvSelecionarHospital.setVisibility(View.VISIBLE);
                 mainBinding.textView9.setVisibility(View.VISIBLE);
+                HallActivity.layoutProcedimentos.setVisibility(View.GONE);
+                mainBinding.layoutPesquisar.setVisibility(View.GONE);
+                editor.putString("idHospitalSelecionado", "").apply();
             } else if (item.getItemId() == R.id.sugerir_pop) {
-                showSugerirPOP();
+                if (prefs.getString("idHospitalSelecionado", "").isEmpty()) {
+                    AlertDialog.Builder b = new AlertDialog.Builder(this);
+                    b.setTitle("Atenção");
+                    b.setMessage("Selecione um hospital primeiro antes de querer enviar uma sugestão de POP");
+                    b.setPositiveButton("ok", null);
+                    b.create().show();
+                } else {
+                    showSugerirPOP();
+                }
             } else if (item.getItemId() == R.id.menu_ajuda_usuario) {
-
+                startActivity(new Intent(this, TutorialActivity.class));
             } else if (item.getItemId() == R.id.menu_creditos_usuario) {
-
+                startActivity(new Intent(this, CreditosActivity.class));
             } else if (item.getItemId() == R.id.menu_sair_usuario) {
                 finish();
                 editor.putString("id", "").apply();
@@ -169,6 +202,15 @@ public class HallActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void pesquisarProcedimento(View view){
+        String query = mainBinding.edtPesquisar.getText().toString();
+        if (!query.isEmpty()){
+            adapterProcedimentos.filter(query);
+        }else{
+            buscarProcedimentos(true, query);
+        }
     }
 
 
@@ -268,11 +310,11 @@ public class HallActivity extends AppCompatActivity {
         adapterProcedimentos = new AdapterProcedimentos(listaProcedimento, this, false);
         rProcedimentos.setAdapter(adapterProcedimentos);
 
-        buscarProcedimentos();
+        buscarProcedimentos(false, "");
 
     }
 
-    public static void buscarProcedimentos() {
+    public static void buscarProcedimentos(boolean filter , String query ) {
 
         refProcedimentos.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
@@ -282,8 +324,16 @@ public class HallActivity extends AppCompatActivity {
                     listaProcedimento.clear();
                     for (DataSnapshot dado : snapshot.getChildren()) {
                         ProcedimentoModel procedimentoModel = dado.getValue(ProcedimentoModel.class);
+
                         if (procedimentoModel.getIdHospital().equals(prefs.getString("idHospitalSelecionado", ""))) {
-                            listaProcedimento.add(procedimentoModel);
+
+                            if ( filter ){
+                                if (procedimentoModel.getNomeProcedimento().toLowerCase().contains(query.toLowerCase().trim())) {
+                                    listaProcedimento.add(procedimentoModel);
+                                }
+                            }else{
+                                listaProcedimento.add(procedimentoModel);
+                            }
                         }
                         adapterProcedimentos.notifyDataSetChanged();
                     }
@@ -304,6 +354,7 @@ public class HallActivity extends AppCompatActivity {
             editor.putString("id", "").apply();
             startActivity(new Intent(this, MainActivity.class));
         } else if (item.getItemId() == R.id.go_to_feedbacks) {
+            mudarIcone(false);
             startActivity(new Intent(this, FeedBacksActivity.class));
         }
         return super.onOptionsItemSelected(item);
@@ -312,6 +363,7 @@ public class HallActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        itemFeedbackMenu = menu.findItem(R.id.go_to_feedbacks);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -327,6 +379,51 @@ public class HallActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+
+    private void mudarIcone(Boolean newFeedbacks) {
+        if (itemFeedbackMenu != null) {
+            if (newFeedbacks) {
+                itemFeedbackMenu.setIcon(R.drawable.email_new_feedback);
+            } else {
+                itemFeedbackMenu.setIcon(R.drawable.email_icon_white);
+            }
+        }
+    }
+
+    private void verificarNovosFeedbacks() {
+
+        int oldCountFeedbacks = prefs.getInt("oldCountFeedbacks", 0);
+
+        refFeedbacks.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (snapshot.exists()) {
+                    for (DataSnapshot dado : snapshot.getChildren()) {
+                        FeedbackModel feedbackModel = dado.getValue(FeedbackModel.class);
+                        try {
+                            if (feedbackModel != null && feedbackModel.getIdUsuario().equals(prefs.getString("id", ""))) {
+                                newCountFeedbacks += 1;
+                            }
+                        } catch (Exception ignored) {
+
+                        }
+                    }
+                    if (oldCountFeedbacks != newCountFeedbacks) {
+                        mudarIcone(true);
+                    }
+                    editor.putInt("oldCountFeedbacks", newCountFeedbacks).apply();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

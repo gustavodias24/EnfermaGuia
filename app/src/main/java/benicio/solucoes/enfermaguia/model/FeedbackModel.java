@@ -3,6 +3,16 @@ package benicio.solucoes.enfermaguia.model;
 public class FeedbackModel {
     String dataFeedback, info, id, IdUsuario;
 
+    boolean SelecionadoDeletar;
+
+    public boolean isSelecionadoDeletar() {
+        return SelecionadoDeletar;
+    }
+
+    public void setSelecionadoDeletar(boolean selecionadoDeletar) {
+        SelecionadoDeletar = selecionadoDeletar;
+    }
+
     public FeedbackModel(String dataFeedback, String info, String id, String idUsuario) {
         this.dataFeedback = dataFeedback;
         this.info = info;
