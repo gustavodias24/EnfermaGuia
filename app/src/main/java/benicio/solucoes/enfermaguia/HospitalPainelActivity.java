@@ -148,15 +148,15 @@ public class HospitalPainelActivity extends AppCompatActivity {
         int buttonSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
         int iconSize = getResources().getDimensionPixelSize(R.dimen.sub_action_icon_size);
 
-// LayoutParams do botão
+        // LayoutParams do botão
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(buttonSize, buttonSize);
 
-// Builder do SubActionButton com layout do botão principal
+        // Builder do SubActionButton com layout do botão principal
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         itemBuilder.setLayoutParams(params);
 
-// -----------------------------
-// Botão Criar Procedimento
+        // -----------------------------
+        // Botão Criar Procedimento
         FrameLayout iconContainer1 = new FrameLayout(this);
         iconContainer1.setLayoutParams(params);
 
@@ -172,8 +172,8 @@ public class HospitalPainelActivity extends AppCompatActivity {
         SubActionButton buttonCriarProcedimento = itemBuilder.setContentView(iconContainer1).build();
         buttonCriarProcedimento.setOnClickListener(v -> startActivity(new Intent(this, CriarProcedimentoActivity.class)));
 
-// -----------------------------
-// Botão Ver Sugestões
+        // -----------------------------
+        // Botão Ver Sugestões
         FrameLayout iconContainer2 = new FrameLayout(this);
         iconContainer2.setLayoutParams(params);
 
@@ -189,8 +189,8 @@ public class HospitalPainelActivity extends AppCompatActivity {
         SubActionButton buttonCriarSugestoes = itemBuilder.setContentView(iconContainer2).build();
         buttonCriarSugestoes.setOnClickListener(v -> startActivity(new Intent(this, VerSugestoesActivity.class)));
 
-// -----------------------------
-// Botão Métricas
+        // -----------------------------
+        // Botão Métricas
         FrameLayout iconContainer3 = new FrameLayout(this);
         iconContainer3.setLayoutParams(params);
 
@@ -206,14 +206,21 @@ public class HospitalPainelActivity extends AppCompatActivity {
         SubActionButton buttonMetricas = itemBuilder.setContentView(iconContainer3).build();
         buttonMetricas.setOnClickListener(v -> startActivity(new Intent(this, MetricasA.class)));
 
-// -----------------------------
-// Criar o menu circular
+        // Define as margens
+        ViewGroup.MarginLayoutParams params2 = (ViewGroup.MarginLayoutParams) actionButton.getLayoutParams();
+        params2.setMargins(params2.leftMargin, params2.topMargin, params2.rightMargin, 124); // bottom = 24px
+        actionButton.setLayoutParams(params2);
+
+        // -----------------------------
+        // Criar o menu circular
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(buttonCriarProcedimento)
                 .addSubActionView(buttonCriarSugestoes)
                 .addSubActionView(buttonMetricas)
                 .attachTo(actionButton) // seu botão principal
                 .build();
+
+
 
 
 
