@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/azul_fote"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:title="EnfermaGuia" />
+            app:title="@string/app_name" />
 
         <ScrollView
             android:layout_width="match_parent"

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dialog_loading.xml (conteúdo do Dialog) -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/azul_fote"
+    android:gravity="center"
+    android:padding="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="Carregando..."
+            android:textColor="#90E0EF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- descrição opcional -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:alpha="0.85"
+            android:text="Isso pode levar alguns segundos"
+            android:textColor="#90E0EF"
+            android:textSize="14sp" />
+
+        <!-- ProgressBar -->
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:indeterminate="true"
+            android:indeterminateTint="#00B4D8" /> <!-- azul_claro -->
+
+        <!-- barra de status sutil -->
+
+    </LinearLayout>
+</LinearLayout>

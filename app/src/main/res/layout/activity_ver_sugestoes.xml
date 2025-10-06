@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:background="@color/white"
-    android:fillViewport="true">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".VerSugestoesActivity">
 
+    <!-- Cabeçalho -->
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="8dp"
-        tools:context=".VerSugestoesActivity">
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:text="Lista:"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Lista:"
-                android:textColor="#000000"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Responder ao Usuário"
-                android:textDirection="rtl" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/remover_selecionados"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#FF1111"
-            android:text="Remover Selecionados"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerSugestoes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp" />
-
+            android:layout_weight="1"
+            android:text="Responder ao Usuário"
+            android:gravity="end"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
     </LinearLayout>
-</ScrollView>
+
+    <!-- Botão sempre visível -->
+    <Button
+        android:id="@+id/remover_selecionados"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Remover Selecionados"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#FF1111" />
+
+    <!-- Lista ocupa o restante e faz o scroll -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerSugestoes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="4dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        tools:listitem="@android:layout/simple_list_item_2" />
+
+</LinearLayout>
