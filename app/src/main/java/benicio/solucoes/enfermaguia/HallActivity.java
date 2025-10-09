@@ -1,5 +1,8 @@
 package benicio.solucoes.enfermaguia;
 
+import static benicio.solucoes.enfermaguia.utils.LoadingUtils.showLoading2;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,31 +70,27 @@ import benicio.solucoes.enfermaguia.model.InfoProcedimento;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 import benicio.solucoes.enfermaguia.model.SugestaoModel;
 import benicio.solucoes.enfermaguia.model.UsuarioModel;
+import benicio.solucoes.enfermaguia.utils.LoadingUtils;
 import benicio.solucoes.enfermaguia.utils.PDFGenerator;
 
 public class HallActivity extends AppCompatActivity {
     int newCountFeedbacks = 0;
 
+    // caso ativa quando clicar em um hospital vai ser para abrir a segestão
+    public static  boolean selecaoAtiva  = false;
+
     MenuItem itemFeedbackMenu;
-    private String nomeUsuario = "";
-    public Dialog dialogSugestao;
+    public static String nomeUsuario = "";
+    public static Dialog dialogSugestao;
     public static List<UsuarioModel> listaHospitais = new ArrayList<>();
     private ActivityHallBinding mainBinding;
 
     private DatabaseReference refFeedbacks = FirebaseDatabase.getInstance().getReference().child("feedbacks");
-    private DatabaseReference refSugestoes = FirebaseDatabase.getInstance().getReference().child("sugestoes");
-    public static DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
+    public static DatabaseReference refSugestoes = FirebaseDatabase.getInstance().getReference().child("sugestoes");
     private DatabaseReference refUsuarios = FirebaseDatabase.getInstance().getReference().child("usuarios");
     public static SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private RecyclerView rProcedimentos;
-    public static List<ProcedimentoModel> listaProcedimento = new ArrayList<>();
-    public static AdapterProcedimentos adapterProcedimentos;
-    public static Dialog dialogSelecionaHospital;
-    public static String nomeHospital = "";
-    public static String idHospital = "";
 
-    public static Button btnCompartilhar;
     public static TextView avisoSelecionarHospital;
     public static RecyclerView recyclerHospital;
 
@@ -98,8 +98,7 @@ public class HallActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
 
-    public static TextView nomeHospitalTEXT;
-    public static LinearLayout layoutProcedimentos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +106,20 @@ public class HallActivity extends AppCompatActivity {
         mainBinding = ActivityHallBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Se o menu lateral estiver aberto, fecha primeiro
+                if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return;
+                }
+
+                // Pergunta se deseja sair do app
+                showExitDialog();
+            }
+        });
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -119,8 +132,7 @@ public class HallActivity extends AppCompatActivity {
 
         pegarNomeUsuario();
 
-        nomeHospitalTEXT = mainBinding.textView7;
-        layoutProcedimentos = mainBinding.layoutProcedimentos;
+
         drawerLayout = mainBinding.drawerLayout;
         navigationView = mainBinding.navigationView;
         toolbar = mainBinding.toolbar;
@@ -137,32 +149,17 @@ public class HallActivity extends AppCompatActivity {
 
         // Clique nos itens do menu
         navigationView.setNavigationItemSelectedListener(item -> {
-
-            if (item.getItemId() == R.id.buscar_procedimentos) {
-                if(prefs.getString("idHospitalSelecionado", "").isEmpty()){
-                    AlertDialog.Builder b = new AlertDialog.Builder(this);
-                    b.setTitle("Atenção");
-                    b.setMessage("Selecione um hospital primeiro antes de querer pesquisar por procedimentos!");
-                    b.setPositiveButton("ok", null);
-                    b.create().show();
-                }else{
-                    mainBinding.layoutPesquisar.setVisibility(View.VISIBLE);
-                }
-            } else if (item.getItemId() == R.id.selecionar_hospital) {
-                mainBinding.rvSelecionarHospital.setVisibility(View.VISIBLE);
-                mainBinding.textView9.setVisibility(View.VISIBLE);
-                HallActivity.layoutProcedimentos.setVisibility(View.GONE);
-                mainBinding.layoutPesquisar.setVisibility(View.GONE);
-                editor.putString("idHospitalSelecionado", "").apply();
-            } else if (item.getItemId() == R.id.sugerir_pop) {
+//            if (item.getItemId() == R.id.selecionar_hospital) {
+//                mainBinding.rvSelecionarHospital.setVisibility(View.VISIBLE);
+//                mainBinding.textView9.setVisibility(View.VISIBLE);
+//                editor.putString("idHospitalSelecionado", "").apply();
+//            } else
+                if (item.getItemId() == R.id.sugerir_pop) {
                 if (prefs.getString("idHospitalSelecionado", "").isEmpty()) {
-                    AlertDialog.Builder b = new AlertDialog.Builder(this);
-                    b.setTitle("Atenção");
-                    b.setMessage("Selecione um hospital primeiro antes de querer enviar uma sugestão de POP");
-                    b.setPositiveButton("ok", null);
-                    b.create().show();
+                    LoadingUtils.showLoading2(this, "Atenção!", "Selecione um hospital primeiro antes de querer enviar uma sugestão de POP");
+                    selecaoAtiva = true;
                 } else {
-                    showSugerirPOP();
+                    HallActivity.showSugerirPOP(this);
                 }
             } else if (item.getItemId() == R.id.menu_ajuda_usuario) {
                 startActivity(new Intent(this, TutorialActivity.class));
@@ -178,53 +175,34 @@ public class HallActivity extends AppCompatActivity {
             return true;
         });
 
-        btnCompartilhar = mainBinding.compartilhar;
         avisoSelecionarHospital = mainBinding.textView9;
 
-        configurarRecyclerProcedimento();
         configurarDialogSelecionarHospital();
         configurrarRVselecionarHospital();
 
-        mainBinding.compartilhar.setOnClickListener(view -> {
-            List<ProcedimentoModel> listaParaCompartilharProcedimento = new ArrayList<>();
-            for (ProcedimentoModel procedimento : listaProcedimento) {
-                if (procedimento.isChecado()) {
-                    listaParaCompartilharProcedimento.add(procedimento);
-                }
-            }
-
-            if (listaParaCompartilharProcedimento.isEmpty()) {
-                Toast.makeText(this, "Selecione pelo menos 1 procedimento!", Toast.LENGTH_SHORT).show();
-            } else {
-//                gerarPdfOS(listaParaCompartilharProcedimento, this);
-                PDFGenerator.generateAndSharePDF(this, listaParaCompartilharProcedimento, "Procedimentos do Hospital " + nomeHospital);
-            }
-        });
-
-
-    }
-
-    public void pesquisarProcedimento(View view){
-        String query = mainBinding.edtPesquisar.getText().toString();
-        if (!query.isEmpty()){
-            adapterProcedimentos.filter(query);
-        }else{
-            buscarProcedimentos(true, query);
-        }
     }
 
 
-    private void showSugerirPOP() {
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
 
-        LayoutCriarSugestaoBinding criarSugestaoBinding = LayoutCriarSugestaoBinding.inflate(getLayoutInflater());
-        criarSugestaoBinding.title.setText("Sugerir um novo POP");
+
+    public static void showSugerirPOP(Activity a) {
+        AlertDialog.Builder b = new AlertDialog.Builder(a);
+
+        b.setCancelable(false);
+
+        LayoutCriarSugestaoBinding criarSugestaoBinding = LayoutCriarSugestaoBinding.inflate(a.getLayoutInflater());
+        criarSugestaoBinding.title.setText("Sugerir um novo POP para " + prefs.getString("nomeHospitalSelecionado", "") );
         criarSugestaoBinding.subtitle.setText("Sugerir a criação de um novo POP");
+
+        criarSugestaoBinding.cancelar.setOnClickListener(v -> {
+            dialogSugestao.dismiss();
+            selecaoAtiva = false;
+        });
 
         criarSugestaoBinding.cadastro.setOnClickListener(view -> {
             String sugestaoString = criarSugestaoBinding.sugestaoField.getText().toString();
             if (sugestaoString.isEmpty()) {
-                Toast.makeText(this, "Sugestão não pode ser vazia!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(a, "Sugestão não pode ser vazia!", Toast.LENGTH_SHORT).show();
             } else {
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 String dataAtual = simpleDateFormat.format(new Date());
@@ -241,7 +219,7 @@ public class HallActivity extends AppCompatActivity {
 
                 refSugestoes.child(sugestaoModel.getId()).setValue(sugestaoModel).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "Sugestão Enviada com Sucesso!", Toast.LENGTH_SHORT).show();
+                        showLoading2(a, "Parabéns!","Sua sugestão foi enviada com sucesso!");
                         dialogSugestao.dismiss();
                     }
                 });
@@ -254,14 +232,7 @@ public class HallActivity extends AppCompatActivity {
     }
 
 
-    public static void setNomeHospitalAtual() {
-        for (UsuarioModel hospital : listaHospitais) {
-            if (prefs.getString("idHospitalSelecionado", "").equals(hospital.getId())) {
-                nomeHospital = hospital.getNome();
-                break;
-            }
-        }
-    }
+
 
     private void configurrarRVselecionarHospital() {
 
@@ -286,7 +257,7 @@ public class HallActivity extends AppCompatActivity {
                     }
 
                     adapterHospitais.notifyDataSetChanged();
-                    setNomeHospitalAtual();
+                    //setNomeHospitalAtual();
 
                 }
             }
@@ -302,50 +273,9 @@ public class HallActivity extends AppCompatActivity {
 
     }
 
-    private void configurarRecyclerProcedimento() {
-        rProcedimentos = mainBinding.recyclerProcedimentos;
-        rProcedimentos.setLayoutManager(new LinearLayoutManager(this));
-        rProcedimentos.setHasFixedSize(true);
-        rProcedimentos.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapterProcedimentos = new AdapterProcedimentos(listaProcedimento, this, false);
-        rProcedimentos.setAdapter(adapterProcedimentos);
 
-        buscarProcedimentos(false, "");
 
-    }
 
-    public static void buscarProcedimentos(boolean filter , String query ) {
-
-        refProcedimentos.addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    listaProcedimento.clear();
-                    for (DataSnapshot dado : snapshot.getChildren()) {
-                        ProcedimentoModel procedimentoModel = dado.getValue(ProcedimentoModel.class);
-
-                        if (procedimentoModel.getIdHospital().equals(prefs.getString("idHospitalSelecionado", ""))) {
-
-                            if ( filter ){
-                                if (procedimentoModel.getNomeProcedimento().toLowerCase().contains(query.toLowerCase().trim())) {
-                                    listaProcedimento.add(procedimentoModel);
-                                }
-                            }else{
-                                listaProcedimento.add(procedimentoModel);
-                            }
-                        }
-                        adapterProcedimentos.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -426,6 +356,19 @@ public class HallActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void showExitDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Sair do aplicativo?")
+                .setMessage("Deseja realmente sair do aplicativo?")
+                .setPositiveButton("Sim", (dialog, which) -> {
+                    // Encerra todas as activities do app
+                    finishAffinity();
+                })
+                .setNegativeButton("Não", null)
+                .setCancelable(true)
+                .show();
     }
 
 }

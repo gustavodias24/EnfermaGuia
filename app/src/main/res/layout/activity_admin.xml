@@ -6,28 +6,32 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/azul_claro"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
+    <!-- ÚNICO filho do ScrollView -->
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/white"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="16dp"
+        android:gravity="center_horizontal"
         tools:context=".AdminActivity">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Escolha uma Opção"
             android:textAlignment="center"
+            android:gravity="center"
             android:textColor="#000000"
             android:textSize="24sp"
-            android:textStyle="bold" />
-
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
 
         <Button
             android:id="@+id/criarHospital"
@@ -40,11 +44,16 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
+        <!-- IMPORTANTE: wrap_content + nestedScrolling desativado
+             para o ScrollView controlar a rolagem e nenhum item cortar -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerHospitais"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:paddingBottom="16dp" />
 
     </LinearLayout>
 </ScrollView>

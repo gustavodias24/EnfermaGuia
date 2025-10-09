@@ -6,6 +6,8 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     android:padding="8dp"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
     tools:context=".VerSugestoesActivity">
 
     <!-- Cabeçalho -->
@@ -61,7 +63,8 @@
         android:layout_weight="1"
         android:layout_marginTop="4dp"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"
+        android:paddingBottom="20dp"
+        android:overScrollMode="ifContentScrolls"
         tools:listitem="@android:layout/simple_list_item_2" />
 
 </LinearLayout>

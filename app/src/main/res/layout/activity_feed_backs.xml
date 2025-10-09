@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/white"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:paddingTop="12dp"
+    android:paddingBottom="16dp"
+    tools:context=".FeedBacksActivity">
 
+    <!-- Único filho do NestedScrollView -->
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/white"
         android:orientation="vertical"
-        android:padding="8dp"
-        tools:context=".FeedBacksActivity">
-
+        android:padding="8dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -41,14 +44,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Carregando..."
-            android:gravity="center"
-            />
+            android:gravity="center" />
 
+        <!-- A lista participa do scroll do container -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerFeedbacks"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="ifContentScrolls" />
+
+        <!-- Espaço final para o último item/botão nunca ficar encoberto -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

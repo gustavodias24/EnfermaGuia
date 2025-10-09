@@ -15,15 +15,22 @@
         android:theme="@style/Theme.EnfermaGuia"
         tools:targetApi="31">
         <activity
-            android:name=".CreditosActivity"
+            android:name=".VerPopHospitalActivity"
+            android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            android:exported="false" />
+            />
+        <activity
+            android:name=".CreditosActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".TutorialActivity"
             android:exported="false" />
         <activity
             android:name=".FeedBacksActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"

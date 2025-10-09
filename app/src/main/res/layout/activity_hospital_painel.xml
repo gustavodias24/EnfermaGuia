@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/azul_claro"
+    android:fitsSystemWindows="true"
     tools:context=".HospitalPainelActivity">
 
     <!-- CONTEÚDO PRINCIPAL -->
@@ -23,11 +24,16 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:title="Painel" />
 
-        <!-- SCROLLABLE CONTENT -->
-        <ScrollView
+        <!-- Área rolável ocupa todo o espaço restante -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp"
+            android:fitsSystemWindows="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,13 +74,17 @@
                     android:textColor="#000000"
                     android:textStyle="bold" />
 
+                <!-- RecyclerView integrado ao scroll do container -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerProcedimentos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="ifContentScrolls" />
+
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 
@@ -87,7 +97,5 @@
         android:background="@android:color/white"
         android:fitsSystemWindows="true"
         app:menu="@menu/menu_opcoes" />
-
-
 
 </androidx.drawerlayout.widget.DrawerLayout>

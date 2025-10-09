@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import benicio.solucoes.enfermaguia.databinding.ActivityMainBinding;
 import benicio.solucoes.enfermaguia.model.UsuarioModel;
+import benicio.solucoes.enfermaguia.utils.LoadingUtils;
 import benicio.solucoes.enfermaguia.utils.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -105,25 +106,25 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
                                         } else {
-                                            Toast.makeText(MainActivity.this, "Senha errada!", Toast.LENGTH_SHORT).show();
+                                            LoadingUtils.showLoading2(MainActivity.this,"Atenção","Senha errada!" );
                                         }
                                     } else {
-                                        Toast.makeText(MainActivity.this, "Login não encontrado!", Toast.LENGTH_SHORT).show();
+                                        LoadingUtils.showLoading2(MainActivity.this,"Atenção","Login não encontrado!" );
                                     }
                                 }else{
-                                    Toast.makeText(MainActivity.this, "Problema de conexão, tente novamente.", Toast.LENGTH_SHORT).show();
+                                    LoadingUtils.showLoading2(MainActivity.this,"Atenção","Problema de conexão, tente novamente." );
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(MainActivity.this, "Problema de conexão, tente novamente.", Toast.LENGTH_SHORT).show();
+                                LoadingUtils.showLoading2(MainActivity.this,"Atenção","Problema de conexão, tente novamente." );
                             }
                         });
                     }
 
                 } else {
-                    Toast.makeText(this, "Preencha as informações!", Toast.LENGTH_SHORT).show();
+                    LoadingUtils.showLoading2(MainActivity.this,"Atenção","Preencha o seu login e senha para entrar!" );
                 }
             }else{
                 AlertDialog.Builder b = new AlertDialog.Builder(this);

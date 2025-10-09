@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/azul_claro"
+    android:fitsSystemWindows="true"
     tools:context=".HallActivity">
 
     <LinearLayout
@@ -22,20 +22,28 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:title="@string/app_name" />
 
-        <ScrollView
+        <!-- Área rolável com respiro e sem cortes -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:background="@color/azul_claro"
-            android:fillViewport="true">
-
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:fitsSystemWindows="true"
+            android:paddingStart="12dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="16dp"
+            android:scrollbarStyle="outsideOverlay">
 
             <LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@color/white"
+                android:clipToPadding="false"
                 android:orientation="vertical"
                 android:padding="8dp"
                 tools:context=".HallActivity">
@@ -49,80 +57,25 @@
                     android:textColor="#000000"
                     android:textStyle="bold" />
 
+                <!-- Lista de hospitais com respiro lateral -->
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSelecionarHospital"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <LinearLayout
-                    android:id="@+id/layout_procedimentos"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <Button
-                        android:id="@+id/compartilhar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#FFC107"
-                        android:text="Compartilhar Selecionados"
-                        android:textAllCaps="true"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:visibility="gone"
-                        app:icon="@drawable/share"
-                        app:iconGravity="textStart"
-                        app:iconSize="15dp" />
-
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:text="Procedimentos do Hospital "
-                        android:textColor="#000000"
-                        android:textSize="21sp" />
-
-                    <LinearLayout
-                        android:id="@+id/layoutPesquisar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <EditText
-                            android:id="@+id/edtPesquisar"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="Digite aqui para pesquisar..."
-                            android:inputType="text" />
-
-                        <Button
-                            android:id="@+id/buttonPesquisar"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/azul_fote"
-                            android:onClick="pesquisarProcedimento"
-                            android:text="Pesquisar"
-                            android:textColor="#FFFFFF" />
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerProcedimentos"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
-
-                <!-- MENU LATERAL -->
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="ifContentScrolls"
+                    android:paddingStart="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="4dp" />
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
+    <!-- MENU LATERAL -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"

@@ -20,6 +20,7 @@ import java.util.Base64;
 
 import benicio.solucoes.enfermaguia.databinding.ActivityCadastroUsuarioBinding;
 import benicio.solucoes.enfermaguia.model.UsuarioModel;
+import benicio.solucoes.enfermaguia.utils.LoadingUtils;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
@@ -59,14 +60,16 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                         for ( DataSnapshot dado : snapshot.getChildren()){
                             if (dado.getKey().equals(id)){
                                 prosseguir = false;
-                                Toast.makeText(CadastroUsuarioActivity.this, "Esse login já está sendo utilizado!", Toast.LENGTH_SHORT).show();
+                                LoadingUtils.showLoading2(CadastroUsuarioActivity.this,"Atenção","Esse login já está sendo utilizado por outra pessoa!" );
                                 break;
                             }
                         }
 
                         if ( prosseguir ){
+                            LoadingUtils.showLoading(CadastroUsuarioActivity.this);
                             refUsuarios.child(id).setValue(new UsuarioModel(id, login, senha, nome)).addOnCompleteListener(task -> {
                                if ( task.isSuccessful() ){
+                                   LoadingUtils.dismissLoading();
                                    Toast.makeText(CadastroUsuarioActivity.this, "Usuário criado!", Toast.LENGTH_SHORT).show();
                                    editor.putString("id", id).apply();
                                    startActivity(new Intent(CadastroUsuarioActivity.this, HallActivity.class));

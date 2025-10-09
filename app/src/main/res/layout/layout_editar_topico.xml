@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,25 +17,25 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-    <TextView
-        android:id="@+id/textEditando"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edite X"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/textEditando"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edite X"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/pronto2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="#4CAF50"
-        android:text="PRONTO"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/pronto2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#4CAF50"
+            android:text="PRONTO"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_marginTop="8dp"
@@ -44,11 +50,15 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="Título"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:maxLines="6"
+            android:scrollbars="vertical"
+            android:overScrollMode="ifContentScrolls" />
 
         <TextView
-            android:layout_marginTop="8dp"
             android:id="@+id/textView8"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Conteúdo" />
@@ -60,17 +70,27 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="Conteúdo"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:lines="6"
+            android:maxLines="12"
+            android:scrollbars="vertical"
+            android:overScrollMode="ifContentScrolls" />
 
-    <Button
-        android:id="@+id/pronto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="#4CAF50"
-        android:text="PRONTO"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/pronto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#4CAF50"
+            android:text="PRONTO"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <!-- Espaço final para evitar que o último botão encoste/fiche encoberto -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

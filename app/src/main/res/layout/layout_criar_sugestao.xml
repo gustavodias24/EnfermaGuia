@@ -1,48 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="24dp">
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Envie sua Sugestão"
-        android:textColor="@color/azul_fote"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Escreva a sua sugestão embaixo sobre esse procedimento." />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Envie sua Sugestão"
+            android:textColor="@color/azul_fote"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/sugestaoField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Sua Sugestão..."
-        android:inputType="textMultiLine"
-        android:lines="5" />
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Escreva a sua sugestão embaixo sobre esse procedimento." />
 
+        <EditText
+            android:id="@+id/sugestaoField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Sua Sugestão..."
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:maxLines="8"
+            android:scrollbars="vertical"
+            android:overScrollMode="ifContentScrolls" />
 
+        <Button
+            android:id="@+id/cadastro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/azul_fote"
+            android:text="enviar"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/cadastro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/azul_fote"
-        android:text="enviar"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/cancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#F44336"
+            android:text="cancelar"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
-</LinearLayout>
+        <!-- Espaço final para o botão nunca ficar colado/encoberto -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

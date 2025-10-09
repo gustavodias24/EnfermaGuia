@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="8dp"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".MetricasA">
 
     <TextView
@@ -18,8 +19,14 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <!-- RecyclerView ocupa o espaço restante da tela -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerMetricas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:overScrollMode="ifContentScrolls" />
+
 </LinearLayout>

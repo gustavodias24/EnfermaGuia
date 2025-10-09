@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/azul_claro"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="24dp">
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/white"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="8dp"
         tools:context=".MainActivity">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:gravity="center|center_horizontal"
+            android:gravity="center"
             android:text="EnfermaGuia"
             android:textAlignment="center"
             android:textColor="#000000"
@@ -94,5 +99,10 @@
             android:textColorHint="#FFFFFF"
             android:textStyle="bold" />
 
+        <!-- Espaço final para garantir respiro em telas pequenas/gestos -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

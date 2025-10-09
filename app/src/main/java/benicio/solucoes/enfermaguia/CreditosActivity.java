@@ -3,8 +3,10 @@ package benicio.solucoes.enfermaguia;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
@@ -24,6 +26,10 @@ public class CreditosActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        getSupportActionBar().setTitle("Voltar");
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         StringBuilder textCredito = new StringBuilder();
         textCredito.append("<h1>").append("CRÉDITOS").append("</h1>").append("<br><br>");
         textCredito.append("<p>").append("Este aplicativo é um produto da Tese de Doutorado em Enfermagem da Universidade de Brasília (UnB) intitulada \"Tecnologia Mobile sobre Procedimentos Operacionais Padrão da Assistência de Enfermagem: usabilidade heurística e Desing participativo\", concebida pelo discente Remo Rodrigues Carneiro, sob orientação da Profª Drª Maria Cristina Soares Rodrigues. ").append("</p>").append("<br>");
@@ -38,5 +44,13 @@ public class CreditosActivity extends AppCompatActivity {
         mainBinding.textView10.setText(Html.fromHtml(textCredito.toString(), Html.FROM_HTML_MODE_LEGACY));
         mainBinding.textView10.setMovementMethod(LinkMovementMethod.getInstance());
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,6 +1,7 @@
 package benicio.solucoes.enfermaguia.adapter;
 
-import static benicio.solucoes.enfermaguia.HallActivity.buscarProcedimentos;
+
+import static benicio.solucoes.enfermaguia.VerPopHospitalActivity.buscarProcedimentos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

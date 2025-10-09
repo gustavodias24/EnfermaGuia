@@ -3,6 +3,7 @@ package benicio.solucoes.enfermaguia;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -48,6 +49,10 @@ public class FeedBacksActivity extends AppCompatActivity {
         mainBinding = ActivityFeedBacksBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        getSupportActionBar().setTitle("Voltar");
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
 
@@ -102,5 +107,13 @@ public class FeedBacksActivity extends AppCompatActivity {
             });
             d.create().show();
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

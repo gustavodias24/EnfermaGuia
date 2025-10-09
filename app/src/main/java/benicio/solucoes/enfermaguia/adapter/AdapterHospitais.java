@@ -1,7 +1,11 @@
 package benicio.solucoes.enfermaguia.adapter;
 
+import static benicio.solucoes.enfermaguia.HallActivity.selecaoAtiva;
+import static benicio.solucoes.enfermaguia.HallActivity.showSugerirPOP;
+
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -21,6 +25,7 @@ import java.util.List;
 
 import benicio.solucoes.enfermaguia.HallActivity;
 import benicio.solucoes.enfermaguia.R;
+import benicio.solucoes.enfermaguia.VerPopHospitalActivity;
 import benicio.solucoes.enfermaguia.model.UsuarioModel;
 
 public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyViewHolder> {
@@ -59,16 +64,24 @@ public class AdapterHospitais extends RecyclerView.Adapter<AdapterHospitais.MyVi
             holder.infos.setText(hospital.getNome());
 
             holder.itemView.getRootView().setOnClickListener(view -> {
+
                 editor.putString("idHospitalSelecionado", hospital.getId()).apply();
+                editor.putString("nomeHospitalSelecionado", hospital.getNome()).apply();
+                if (selecaoAtiva){
+                    HallActivity.showSugerirPOP(c);
+                }else{
+                    Toast.makeText(c, "Hospital " + hospital.getNome() + " Selecionado", Toast.LENGTH_SHORT).show();
+                    c.startActivity(new Intent(c, VerPopHospitalActivity.class));
+                }
                 //HallActivity.dialogSelecionaHospital.dismiss();
-                Toast.makeText(c, "Hospital " + hospital.getNome() + " Selecionado", Toast.LENGTH_SHORT).show();
-                HallActivity.setNomeHospitalAtual();
-                HallActivity.buscarProcedimentos(false, "");
-                HallActivity.recyclerHospital.setVisibility(View.GONE);
-                HallActivity.btnCompartilhar.setVisibility(View.VISIBLE);
-                HallActivity.avisoSelecionarHospital.setVisibility(View.GONE);
-                HallActivity.nomeHospitalTEXT.setText(Html.fromHtml("<b><h1>" + hospital.getNome() + "</h1></b>" + "<br>Procedimentos Operacionais Padrão."));
-                HallActivity.layoutProcedimentos.setVisibility(View.VISIBLE);
+
+//                HallActivity.setNomeHospitalAtual();
+//                HallActivity.buscarProcedimentos(false, "");
+//                HallActivity.recyclerHospital.setVisibility(View.GONE);
+//                HallActivity.btnCompartilhar.setVisibility(View.VISIBLE);
+//                HallActivity.avisoSelecionarHospital.setVisibility(View.GONE);
+//                HallActivity.nomeHospitalTEXT.setText(Html.fromHtml("<b><h1>" + hospital.getNome() + "</h1></b>" + "<br>Procedimentos Operacionais Padrão."));
+//                HallActivity.layoutProcedimentos.setVisibility(View.VISIBLE);
             });
         } else {
 
