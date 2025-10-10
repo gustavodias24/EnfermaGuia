@@ -14,24 +14,25 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:fitsSystemWindows="true"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- Área rolável ocupa todo o espaço do container -->
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            android:clipToPadding="false"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingBottom="12dp">
+            <!-- (removido android:clipToPadding="false" para respeitar o padding do container) -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,21 +92,18 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Vazio" />
-
-
                 </LinearLayout>
 
-                <!-- Lista integrada ao scroll do container -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerProcedimentos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="ifContentScrolls"
                     android:paddingStart="12dp"
                     android:paddingTop="4dp"
                     android:paddingEnd="12dp"
-                    android:paddingBottom="4dp"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="ifContentScrolls" />
+                    android:paddingBottom="4dp" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
