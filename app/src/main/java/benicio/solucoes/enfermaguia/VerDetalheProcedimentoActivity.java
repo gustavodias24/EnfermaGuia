@@ -134,6 +134,8 @@ public class VerDetalheProcedimentoActivity extends AppCompatActivity {
 
         LayoutCriarSugestaoBinding criarSugestaoBinding = LayoutCriarSugestaoBinding.inflate(getLayoutInflater());
 
+        criarSugestaoBinding.cancelar.setOnClickListener( v -> dialogSugestao.dismiss());
+
         criarSugestaoBinding.cadastro.setOnClickListener(view -> {
             String sugestaoString = criarSugestaoBinding.sugestaoField.getText().toString();
             if (sugestaoString.isEmpty()) {

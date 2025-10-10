@@ -38,6 +38,8 @@ public class TutorialActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
+
+
         if ( b != null && b.getBoolean("h")) {
             tutorialUser.add(R.raw.h1);
             mainBinding.imageTutorial.setImageResource(
@@ -47,16 +49,32 @@ public class TutorialActivity extends AppCompatActivity {
             tutorialUser.add(R.raw.h3);
             tutorialUser.add(R.raw.h4);
             limit = 3;
-        } else {
-            tutorialUser.add(R.raw.u1);
-            tutorialUser.add(R.raw.u2);
-            tutorialUser.add(R.raw.u3);
-            tutorialUser.add(R.raw.u4);
-            tutorialUser.add(R.raw.u5);
-            tutorialUser.add(R.raw.u6);
-            tutorialUser.add(R.raw.u7);
-            limit = 6;
         }
+        else {
+            if ( b != null && b.getBoolean("procedimento", false)) {
+
+                tutorialUser.add(R.raw.tutorialproced1);
+                mainBinding.imageTutorial.setImageResource(
+                        tutorialUser.get(0)
+                );
+                tutorialUser.add(R.raw.tutorialproced2);
+                tutorialUser.add(R.raw.tutorialproced3);
+                tutorialUser.add(R.raw.tutorialproced4);
+                limit = 3;
+            }else{
+                // adicionar ifs aqui
+                tutorialUser.add(R.raw.u1);
+                tutorialUser.add(R.raw.u2);
+                tutorialUser.add(R.raw.u3);
+                tutorialUser.add(R.raw.u4);
+                tutorialUser.add(R.raw.u5);
+                tutorialUser.add(R.raw.u6);
+                tutorialUser.add(R.raw.u7);
+                limit = 6;
+            }
+        }
+
+
 
 
         mainBinding.imageTutorial.setOnClickListener(v -> {

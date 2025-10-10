@@ -117,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="PreView Conteúdo"
+            android:text="Conteúdo"
             android:textColor="#000000"
             android:textStyle="bold" />
 
@@ -145,6 +145,12 @@
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tutorial" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

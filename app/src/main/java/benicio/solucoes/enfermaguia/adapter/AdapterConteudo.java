@@ -62,11 +62,11 @@ public class AdapterConteudo extends RecyclerView.Adapter<AdapterConteudo.MyView
 
             editarTopicoBinding.edtTitulo.setText(conteudoModel.getTitulo());
             editarTopicoBinding.edtTextoConteudo.setText(conteudoModel.getInfo());
-
-            editarTopicoBinding.pronto2.setOnClickListener(pronto2View -> {
-
-                funcaoPronto(conteudoModel, editarTopicoBinding, position);
-            });
+//
+//            editarTopicoBinding.pronto2.setOnClickListener(pronto2View -> {
+//
+//                funcaoPronto(conteudoModel, editarTopicoBinding, position);
+//            });
             editarTopicoBinding.pronto.setOnClickListener(prontoView -> {
                 funcaoPronto(conteudoModel, editarTopicoBinding, position);
             });

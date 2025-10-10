@@ -26,17 +26,6 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/pronto2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="#4CAF50"
-            android:text="PRONTO"
-            android:textAllCaps="true"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
         <TextView
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"

@@ -35,6 +35,7 @@ import benicio.solucoes.enfermaguia.model.ConteudoModel;
 import benicio.solucoes.enfermaguia.model.InfoProcedimento;
 import benicio.solucoes.enfermaguia.model.ProcedimentoModel;
 import benicio.solucoes.enfermaguia.utils.ItemMoveCallback;
+import benicio.solucoes.enfermaguia.utils.LoadingUtils;
 
 public class CriarProcedimentoActivity extends AppCompatActivity {
     private DatabaseReference refProcedimentos = FirebaseDatabase.getInstance().getReference().child("procedimentos");
@@ -81,7 +82,7 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
             info = mainBinding.conteudoField.getEditText().getText().toString();
 
             if (titulo.isEmpty() || info.isEmpty()) {
-                Toast.makeText(this, "Preencha o Título e o Conteúdo do procedimento.", Toast.LENGTH_SHORT).show();
+                LoadingUtils.showLoading2(this, "Atenção", "Preencha o Título e o Conteúdo do procedimento.");
             } else {
                 mainBinding.tituloField.getEditText().setText("");
                 mainBinding.conteudoField.getEditText().setText("");
@@ -95,7 +96,7 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
             String nomeProcedimento = mainBinding.nomeField.getEditText().getText().toString();
 
             if (nomeProcedimento.isEmpty()) {
-                Toast.makeText(this, "Adicione o Nome do Procedimento.", Toast.LENGTH_SHORT).show();
+                LoadingUtils.showLoading2(this, "Atenção","Adicione o Nome do Procedimento.");
             } else {
                 String id = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
 
@@ -133,6 +134,12 @@ public class CriarProcedimentoActivity extends AppCompatActivity {
 
             }
 
+        });
+
+        mainBinding.button.setOnClickListener(v -> {
+            Intent i = new Intent(this, TutorialActivity.class);
+            i.putExtra("procedimento", true);
+            startActivity(i);
         });
     }
 
