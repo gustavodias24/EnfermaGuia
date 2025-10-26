@@ -9,6 +9,22 @@
         android:id="@+id/sugerir_pop"
         android:icon="@drawable/sugestoes"
         android:title="Sugerir um novo POP" />
+
+    <item
+        android:id="@+id/historico_pop"
+        android:icon="@drawable/historia_ico"
+        android:title="Histórico" />
+
+    <item
+        android:id="@+id/favoritos_hospital"
+        android:icon="@drawable/estrela2"
+        android:title="Hospitais favoritos" />
+
+    <item
+        android:id="@+id/procedimentos_hospital"
+        android:icon="@drawable/estrela2"
+        android:title="Procedimentos favoritos" />
+
     <item
         android:id="@+id/menu_ajuda_usuario"
         android:title="Ajuda"

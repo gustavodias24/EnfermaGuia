@@ -15,10 +15,22 @@
         android:theme="@style/Theme.EnfermaGuia"
         tools:targetApi="31">
         <activity
-            android:name=".VerPopHospitalActivity"
+            android:name=".FavoritoProcedimentosActivity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
             />
+        <activity
+            android:name=".FavoritoHospitaisActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
+        <activity
+            android:name=".HistoricoProcedimentosActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
+        <activity
+            android:name=".VerPopHospitalActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".CreditosActivity"
             android:exported="false"
@@ -29,8 +41,7 @@
         <activity
             android:name=".FeedBacksActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            />
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -40,7 +51,11 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+            <!-- Desabilita o initializer do Lifecycle -->
+
         </provider>
+
+
 
         <activity
             android:name=".CriarProcedimentoActivity"

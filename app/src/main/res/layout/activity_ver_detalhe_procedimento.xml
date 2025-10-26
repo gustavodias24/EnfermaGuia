@@ -34,6 +34,18 @@
             app:icon="@drawable/tip"
             app:iconGravity="textStart" />
 
+        <Button
+            android:id="@+id/tutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/azul_fote"
+            android:drawableEnd="@drawable/baseline_help_outline_24"
+            android:drawableTint="#FFFFFF"
+            android:gravity="center"
+            android:text="Ajuda" />
+
+
         <TextView
             android:id="@+id/textTituloHospital"
             android:layout_width="match_parent"

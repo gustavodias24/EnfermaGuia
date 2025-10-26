@@ -41,13 +41,31 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/btn_ir_ver_procedimento"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
+            android:id="@+id/btn_ir_duplicar_procedimento"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_gravity="center"
             android:backgroundTint="#00FFFFFF"
             android:scaleType="centerInside"
+            app:srcCompat="@drawable/duplicado_ico" />
+
+        <ImageButton
+            android:id="@+id/btn_ir_ver_procedimento"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="centerCrop"
             android:src="@drawable/lupa"
             android:tint="@color/azul_fote" />
+
+        <ImageButton
+            android:id="@+id/favoritarProcecimento"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:backgroundTint="#00FBFBFB"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/estrela1" />
+
     </LinearLayout>
 
     <Button

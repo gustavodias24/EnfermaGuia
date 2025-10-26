@@ -52,6 +52,17 @@
                     app:iconGravity="textStart"
                     app:iconSize="15dp" />
 
+                <Button
+                    android:id="@+id/tutorial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/azul_fote"
+                    android:drawableEnd="@drawable/baseline_help_outline_24"
+                    android:drawableTint="#FFFFFF"
+                    android:gravity="center"
+                    android:text="Carregando..." />
+
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
@@ -66,33 +77,84 @@
                     android:id="@+id/layoutPesquisar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="vertical">
+                    android:layout_margin="12dp"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:elevation="4dp">
 
+                    <!-- Título opcional -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pesquisar procedimentos"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="8dp" />
+
+                    <!-- Modo de pesquisa -->
+                    <RadioGroup
+                        android:id="@+id/rgModoPesquisa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <RadioButton
+                            android:id="@+id/rbPorNome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="16dp"
+                            android:checked="true"
+                            android:gravity="center"
+                            android:text="Por nome" />
+
+                        <RadioButton
+                            android:id="@+id/rbDentroProcedimento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Dentro do procedimento" />
+                    </RadioGroup>
+
+                    <!-- Campo de busca -->
                     <EditText
                         android:id="@+id/edtPesquisar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
+                        android:layout_height="44dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
                         android:hint="Digite aqui para pesquisar..."
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:imeOptions="actionSearch"
+                        android:drawableStart="@android:drawable/ic_menu_search"
+                        android:drawablePadding="8dp"
+                        android:layout_marginBottom="8dp" />
 
+                    <!-- Botão de busca -->
                     <Button
                         android:id="@+id/buttonPesquisar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="44dp"
                         android:backgroundTint="@color/azul_fote"
                         android:onClick="pesquisarProcedimento"
                         android:text="Pesquisar"
+                        android:textAllCaps="false"
+                        android:textStyle="bold"
                         android:textColor="#FFFFFF" />
 
+                    <!-- Mensagem/estado -->
                     <TextView
                         android:id="@+id/textView12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Vazio" />
+                        android:text="Vazio"
+                        android:textColor="@color/black" />
                 </LinearLayout>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerProcedimentos"
