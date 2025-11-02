@@ -19,6 +19,12 @@
         />
 
     <item
+        android:id="@+id/menu_pdf"
+        android:title="pdf"
+        android:icon="@drawable/pdf"
+        />
+
+    <item
         android:id="@+id/menu_creditos"
         android:title="Créditos"
         android:icon="@drawable/baseline_info_24"

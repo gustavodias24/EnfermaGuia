@@ -3,11 +3,14 @@ package benicio.solucoes.enfermaguia;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -128,13 +131,13 @@ public class VerPopHospitalActivity extends AppCompatActivity {
         if (mainBinding.rbPorNome != null && mainBinding.edtPesquisar != null) {
             mainBinding.rbPorNome.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) mainBinding.edtPesquisar.setHint("Digite aqui para pesquisar...");
-                pesquisarPorNome = true;
+                pesquisarPorNome = false;
             });
         }
         if (mainBinding.rbDentroProcedimento != null && mainBinding.edtPesquisar != null) {
             mainBinding.rbDentroProcedimento.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) mainBinding.edtPesquisar.setHint("Pesquisar dentro do procedimento…");
-                pesquisarPorNome = false;
+                pesquisarPorNome = true;
             });
         }
 
@@ -154,6 +157,53 @@ public class VerPopHospitalActivity extends AppCompatActivity {
         });
 
         configurarRecyclerProcedimento();
+
+        // Observa quando o campo fica vazio (ou não)
+        watchEmpty(mainBinding.edtPesquisar, isEmpty -> {
+            if (isEmpty) {
+                pesquisarProcedimento();
+            } else {
+                // FAÇA ALGO QUANDO TIVER TEXTO
+                // btnBuscar.setEnabled(true);
+            }
+        });
+
+        mainBinding.buttonPesquisar.setOnClickListener(v ->  pesquisarProcedimento());
+    }
+
+
+
+    /** Observa o EditText e dispara sempre que o "vazio" mudar */
+    private void watchEmpty(EditText editText, OnEmptyListener listener) {
+        // dispara estado inicial
+        listener.onEmptyChanged(isEmpty(editText.getText()));
+
+        editText.addTextChangedListener(new TextWatcher() {
+            private Boolean lastState = null;
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override public void afterTextChanged(Editable s) {
+                boolean nowEmpty = isEmpty(s);
+                // só notifica quando mudar de vazio <-> não vazio
+                if (lastState == null || lastState != nowEmpty) {
+                    lastState = nowEmpty;
+                    listener.onEmptyChanged(nowEmpty);
+                }
+            }
+        });
+    }
+
+    /** Considera vazio se for nulo, branco ou só espaços */
+    private boolean isEmpty(Editable s) {
+        return s == null || s.toString().trim().isEmpty();
+    }
+
+    /** Callback simples para o estado "vazio" do campo */
+    public interface OnEmptyListener {
+        void onEmptyChanged(boolean isEmpty);
     }
 
     @Override
@@ -170,7 +220,7 @@ public class VerPopHospitalActivity extends AppCompatActivity {
     }
 
     // ==================== BUSCA ====================
-    public void pesquisarProcedimento(View view){
+    public void pesquisarProcedimento(){
         String query = mainBinding.edtPesquisar.getText().toString();
         LoadingUtils.showLoading(this);
 
@@ -300,7 +350,7 @@ public class VerPopHospitalActivity extends AppCompatActivity {
                 TapTarget.forView(
                                 mainBinding.compartilhar,
                                 "Compartilhar selecionados",
-                                "Marque procedimentos e toque aqui para gerar um PDF e compartilhar.")
+                                "Marque os procedimentos que desejar e toque aqui para gerar um PDF e compartilhá-lo.")
                         .outerCircleColorInt(getColorCompat(R.color.purple_700))
                         .targetCircleColorInt(getColorCompat(android.R.color.white))
                         .textColorInt(getColorCompat(android.R.color.white))
@@ -311,7 +361,7 @@ public class VerPopHospitalActivity extends AppCompatActivity {
                 TapTarget.forView(
                                 mainBinding.edtPesquisar,
                                 "Pesquisar",
-                                "Busque por nome ou dentro do conteúdo do procedimento.")
+                                "Busque por nome ou por conteúdo do procedimento.")
                         .outerCircleColorInt(getColorCompat(R.color.purple_700))
                         .targetCircleColorInt(getColorCompat(android.R.color.white))
                         .textColorInt(getColorCompat(android.R.color.white))
@@ -324,7 +374,7 @@ public class VerPopHospitalActivity extends AppCompatActivity {
                 TapTarget.forView(
                                 mainBinding.rbPorNome,
                                 "Modo de busca: Por nome",
-                                "Filtra usando apenas o NOME do procedimento. Rápido e direto.")
+                                "Filtre a busca usando apenas o NOME do procedimento. Rápido e direto.")
                         .outerCircleColorInt(getColorCompat(R.color.purple_700))
                         .targetCircleColorInt(getColorCompat(android.R.color.white))
                         .textColorInt(getColorCompat(android.R.color.white))
@@ -335,7 +385,7 @@ public class VerPopHospitalActivity extends AppCompatActivity {
                 TapTarget.forView(
                                 mainBinding.rbDentroProcedimento,
                                 "Modo de busca: Dentro do procedimento",
-                                "Procura o termo no conteúdo do POP (texto interno). Útil quando lembra uma frase específica.")
+                                "Procure o termo no conteúdo do POP (texto interno). Útil quando se lembra de uma frase específica.")
                         .outerCircleColorInt(getColorCompat(R.color.purple_700))
                         .targetCircleColorInt(getColorCompat(android.R.color.white))
                         .textColorInt(getColorCompat(android.R.color.white))
@@ -367,7 +417,7 @@ public class VerPopHospitalActivity extends AppCompatActivity {
 
             if (ver != null) preparedQueue.add(buildTapForView(ver, "Ver procedimento", "Abra o POP para leitura.", ID_VER));
             if (fav != null) preparedQueue.add(buildTapForView(fav, "Favoritar procedimento", "Salve este POP nos seus favoritos.", ID_FAV));
-            if (chk != null) preparedQueue.add(buildTapForView(chk, "Marcar para compartilhar", "Selecione para incluir no PDF.", ID_CHECK));
+            if (chk != null) preparedQueue.add(buildTapForView(chk, "Marcar para compartilhar", "Selecione para incluir no PDF a ser compartilhado.", ID_CHECK));
 
             if (ver != null || fav != null || chk != null) {
                 finishPrepare(afterPrepared);
