@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="EnfermaGuia"
+            android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="34sp"

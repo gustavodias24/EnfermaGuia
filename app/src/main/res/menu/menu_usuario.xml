@@ -26,6 +26,12 @@
         android:title="Procedimentos favoritos" />
 
     <item
+        android:id="@+id/menu_pdf_usuario"
+        android:title="pdf"
+        android:icon="@drawable/pdf"
+        />
+
+    <item
         android:id="@+id/menu_ajuda_usuario"
         android:title="Ajuda"
         android:icon="@drawable/baseline_help_outline_24"

@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -43,6 +46,10 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -135,7 +142,45 @@ public class HospitalPainelActivity extends AppCompatActivity {
                 startActivity(new Intent(this, VerSugestoesActivity.class));
             } else if (item.getItemId() == R.id.menu_metricas) {
                 startActivity(new Intent(this, MetricasA.class));
-            } else if (item.getItemId() == R.id.menu_ajuda) {
+            }
+            else if (item.getItemId() == R.id.menu_pdf_hospital){
+                try {
+                    // 1. Copia o PDF do raw para o cache interno
+                    InputStream inputStream = getResources().openRawResource(R.raw.hospital);
+                    File outFile = new File(getCacheDir(), "hospital.pdf");
+
+                    FileOutputStream outputStream = new FileOutputStream(outFile);
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
+                    outputStream.flush();
+                    outputStream.close();
+                    inputStream.close();
+
+                    // 2. Pega o URI via FileProvider
+                    Uri pdfUri = FileProvider.getUriForFile(
+                            this,                           // contexto da Activity
+                            getPackageName() + ".provider", // <= BATE COM O TEU MANIFEST
+                            outFile
+                    );
+
+                    // 3. Cria o intent para abrir o PDF
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(pdfUri, "application/pdf");
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    startActivity(Intent.createChooser(intent, "Abrir manual do usuário"));
+
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(this, "Nenhum aplicativo para abrir PDF encontrado.", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Erro ao abrir o PDF.", Toast.LENGTH_LONG).show();
+                }
+            }
+            else if (item.getItemId() == R.id.menu_ajuda) {
                 // Reconstrói a fila SEM travar, incluindo itens do adapter
                 Log.d(TAG_TUTORIAL, "Ajuda: reconstruindo fila do tutorial");
                 preResolveTutorialTargetsSilently(this::showPreparedTutorial);

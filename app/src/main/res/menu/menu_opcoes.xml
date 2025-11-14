@@ -19,7 +19,7 @@
         />
 
     <item
-        android:id="@+id/menu_pdf"
+        android:id="@+id/menu_pdf_hospital"
         android:title="pdf"
         android:icon="@drawable/pdf"
         />

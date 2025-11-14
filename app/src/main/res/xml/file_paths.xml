@@ -3,4 +3,14 @@
     <external-path
         name="external_files"
         path="." />
+
+    <!-- cache interno -->
+    <cache-path
+        name="cache"
+        path="." />
+
+    <!-- pasta files interna -->
+    <files-path
+        name="files"
+        path="." />
 </paths>

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -19,8 +20,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +44,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -61,21 +68,29 @@ import benicio.solucoes.enfermaguia.utils.LoadingUtils;
 public class HallActivity extends AppCompatActivity {
 
     // ==================== ESTADO DO TUTORIAL ====================
-    /** Fila PREPARADA (alvos resolvidos), não exibida até o usuário clicar em Ajuda */
+    /**
+     * Fila PREPARADA (alvos resolvidos), não exibida até o usuário clicar em Ajuda
+     */
     private final Deque<TapTarget> preparedQueue = new ArrayDeque<>();
     private boolean tutorialPrepared = false;   // já temos todos os alvos prontos?
     private boolean preparingTutorial = false;  // evita corrida de preparação
     private static final int ID_FAVORITAR = 4;  // id lógico do alvo "Favoritar hospital"
 
-    /** Callback pendente para mostrar quando a preparação terminar */
+    /**
+     * Callback pendente para mostrar quando a preparação terminar
+     */
     private SimpleCallback pendingAfterPrepared = null;
 
-    /** Observers só para PRÉ-CÁLCULO (resolução da estrela do 1º item) */
+    /**
+     * Observers só para PRÉ-CÁLCULO (resolução da estrela do 1º item)
+     */
     private RecyclerView.AdapterDataObserver dataObserverPrep;
     private RecyclerView.OnChildAttachStateChangeListener childAttachListenerPrep;
     private ViewTreeObserver.OnGlobalLayoutListener globalLayoutListenerPrep;
 
-    /** Handler UI */
+    /**
+     * Handler UI
+     */
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     // ==================== OUTROS CAMPOS EXISTENTES ====================
@@ -158,6 +173,42 @@ public class HallActivity extends AppCompatActivity {
                 startActivity(new Intent(this, FavoritoHospitaisActivity.class));
             } else if (item.getItemId() == R.id.historico_pop) {
                 startActivity(new Intent(this, HistoricoProcedimentosActivity.class));
+            } else if (item.getItemId() == R.id.menu_pdf_usuario) {
+                try {
+                    // 1. Copia o PDF do raw para o cache interno
+                    InputStream inputStream = getResources().openRawResource(R.raw.usuario);
+                    File outFile = new File(getCacheDir(), "usuario.pdf");
+
+                    FileOutputStream outputStream = new FileOutputStream(outFile);
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
+                    outputStream.flush();
+                    outputStream.close();
+                    inputStream.close();
+
+                    // 2. Pega o URI via FileProvider
+                    Uri pdfUri = FileProvider.getUriForFile(
+                            this,                           // contexto da Activity
+                            getPackageName() + ".provider", // <= BATE COM O TEU MANIFEST
+                            outFile
+                    );
+
+                    // 3. Cria o intent para abrir o PDF
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(pdfUri, "application/pdf");
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    startActivity(Intent.createChooser(intent, "Abrir manual do usuário"));
+
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(this, "Nenhum aplicativo para abrir PDF encontrado.", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Erro ao abrir o PDF.", Toast.LENGTH_LONG).show();
+                }
             } else if (item.getItemId() == R.id.menu_ajuda_usuario) {
                 // MOSTRAR o tutorial apenas quando o usuário pedir Ajuda
                 if (!tutorialPrepared && !preparingTutorial) {
@@ -280,7 +331,8 @@ public class HallActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -330,7 +382,8 @@ public class HallActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -359,7 +412,8 @@ public class HallActivity extends AppCompatActivity {
                             if (feedbackModel != null && feedbackModel.getIdUsuario().equals(prefs.getString("id", ""))) {
                                 newCountFeedbacks += 1;
                             }
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                     }
                     if (oldCountFeedbacks != newCountFeedbacks) {
                         mudarIcone(true);
@@ -369,7 +423,8 @@ public class HallActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -384,10 +439,17 @@ public class HallActivity extends AppCompatActivity {
     }
 
     // ==================== PRÉ-CÁLCULO DO TUTORIAL (sem mostrar) ====================
-    /** Callback simples compatível com projetos sem lambdas */
-    interface SimpleCallback { void run(); }
 
-    /** Pré-resolve todos os alvos do tutorial SEM mostrar nada. Chame no onStart. */
+    /**
+     * Callback simples compatível com projetos sem lambdas
+     */
+    interface SimpleCallback {
+        void run();
+    }
+
+    /**
+     * Pré-resolve todos os alvos do tutorial SEM mostrar nada. Chame no onStart.
+     */
     private void preResolveTutorialTargetsSilently(SimpleCallback afterPrepared) {
         // Se já estamos preparando, apenas registra callback e sai
         if (preparingTutorial) {
@@ -477,7 +539,8 @@ public class HallActivity extends AppCompatActivity {
             // se ainda não existe, aguardamos pelos observers
             if (globalLayoutListenerPrep == null) {
                 globalLayoutListenerPrep = new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override public void onGlobalLayout() {
+                    @Override
+                    public void onGlobalLayout() {
                         resolveFavoritarIfPossible();
                         recyclerHospital.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         globalLayoutListenerPrep = null;
@@ -504,16 +567,28 @@ public class HallActivity extends AppCompatActivity {
 
         if (dataObserverPrep == null && recyclerHospital.getAdapter() != null) {
             dataObserverPrep = new RecyclerView.AdapterDataObserver() {
-                @Override public void onChanged() { resolveFavoritarIfPossible(); }
-                @Override public void onItemRangeInserted(int positionStart, int itemCount) { resolveFavoritarIfPossible(); }
+                @Override
+                public void onChanged() {
+                    resolveFavoritarIfPossible();
+                }
+
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    resolveFavoritarIfPossible();
+                }
             };
             recyclerHospital.getAdapter().registerAdapterDataObserver(dataObserverPrep);
         }
 
         if (childAttachListenerPrep == null) {
             childAttachListenerPrep = new RecyclerView.OnChildAttachStateChangeListener() {
-                @Override public void onChildViewAttachedToWindow(@NonNull View view) { resolveFavoritarIfPossible(); }
-                @Override public void onChildViewDetachedFromWindow(@NonNull View view) { /* noop */ }
+                @Override
+                public void onChildViewAttachedToWindow(@NonNull View view) {
+                    resolveFavoritarIfPossible();
+                }
+
+                @Override
+                public void onChildViewDetachedFromWindow(@NonNull View view) { /* noop */ }
             };
             recyclerHospital.addOnChildAttachStateChangeListener(childAttachListenerPrep);
         }
@@ -536,7 +611,9 @@ public class HallActivity extends AppCompatActivity {
         globalLayoutListenerPrep = null;
     }
 
-    /** Tenta resolver a estrela e finalizar a preparação apenas uma vez */
+    /**
+     * Tenta resolver a estrela e finalizar a preparação apenas uma vez
+     */
     private void resolveFavoritarIfPossible() {
         if (!preparingTutorial) return;
         if (tutorialPrepared) return;
@@ -548,7 +625,9 @@ public class HallActivity extends AppCompatActivity {
         }
     }
 
-    /** Ajuste o ID da estrela do seu item aqui se for diferente */
+    /**
+     * Ajuste o ID da estrela do seu item aqui se for diferente
+     */
     private View findFirstStarFromRecyclerPrepared() {
         if (recyclerHospital == null) return null;
         RecyclerView.ViewHolder vh = recyclerHospital.findViewHolderForAdapterPosition(0);
@@ -624,15 +703,20 @@ public class HallActivity extends AppCompatActivity {
                 this,
                 targetToShow,
                 new TapTargetView.Listener() {
-                    @Override public void onTargetClick(TapTargetView view) {
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
                         view.dismiss(true);
                     }
-                    @Override public void onOuterCircleClick(TapTargetView view) {
+
+                    @Override
+                    public void onOuterCircleClick(TapTargetView view) {
                         super.onOuterCircleClick(view);
                         view.dismiss(true);
                     }
-                    @Override public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+
+                    @Override
+                    public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
                         // chama o próximo no loop da UI
                         mainHandler.post(() -> showNextTargetFromQueue(queue));
                     }
